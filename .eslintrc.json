@@ -1,3 +1,66 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:react/recommended",
+    "standard-with-typescript",
+    "prettier"
+  ],
+  "overrides": [{ "files": ["*.ts", "*.tsx"] }],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["react"],
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "off",
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-confusing-void-expression": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
+    "react/no-children-prop": "off",
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        }
+      }
+    ],
+    "quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": true }
+    ],
+    "arrow-parens": ["off", "as-needed"],
+    "spaced-comment": ["error", "always"],
+    "eqeqeq": ["error", "smart"],
+    "no-duplicate-imports": "error",
+    "no-console": ["off", { "allow": ["warn", "error", "info"] }],
+    "react/no-unknown-property": "error", // disallows unknown props or properties being pass to any React Component or HTML Element
+    "no-unused-vars": "error",
+    "no-eval": "error",
+    "no-underscore-dangle": "off",
+    "object-shorthand": "error",
+    "one-var": ["error", "never"],
+    // "dot-notation": ["error", { "allowKeywords": false }],
+    // "no-nested-ternary": "error",
+    "@typescript-eslint/semi": ["error", "always"],
+    "multiline-ternary": 0,
+    "@typescript-eslint/strict-boolean-expressions": 0
+  }
 }

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,7 +19,7 @@
       }
     ],
     "paths": {
-      "@micro": ["./src/components/atoms"],
+      "@micro": ["./src/components/micro"],
       "@molecules": ["./src/components/molecules"],
       "@organisms": ["./src/components/organisms"],
       "@assests": ["./src/assets"]
