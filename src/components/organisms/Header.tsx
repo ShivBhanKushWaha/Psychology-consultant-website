@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Logo, Menu, Close} from '@assests';
+import { Logo, Menu, Close, AdminLogo, DoctorLogin, UserLogin} from '@assests';
 import { useRouter } from 'next/navigation';
 
 const Header = () => {
@@ -50,24 +50,28 @@ const Header = () => {
         </button>
 
         <div className="hidden w-full md:block md:w-auto">
-          <ul className="flex font-normal text-white flex-col p-4 md:p-2 mt-4 rounded-lg  md:flex-row md:space-x-14 md:mt-0 md:border-0">
+          <ul className="flex font-normal text-white flex-row p-4 md:p-2 mt-4 rounded-lg  md:space-x-14 md:mt-0 md:border-0 items-center justify-center">
             <li>
-              <Link className="text-base focus:text-blue-500" href="/admin">
+              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/admin">
+                <Image src={AdminLogo} alt='Admin Logo'/>
                 Admin
               </Link>
             </li>
             <li>
-              <Link className="text-base relative focus:text-blue-500" href="/doctor/signup">
+              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/doctor/signup">
+              <Image src={DoctorLogin} alt='Doctor Logo'/>
                 Doctor
               </Link>
             </li>
             <li>
-              <Link className="text-base relative focus:text-blue-500" href="/Appoitnent">
+              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/">
+              <Image src={UserLogin} alt='Doctor Logo'/>
                 Appoitnent
               </Link>
             </li>
             <li>
-              <Link className="text-base focus:text-blue-500" href="/user/signin">
+              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/user/signin">
+              <Image src={UserLogin} alt='Doctor Logo'/>
                 User
               </Link>
             </li>
