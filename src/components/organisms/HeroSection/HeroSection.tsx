@@ -17,7 +17,7 @@ const HeroSection = () => {
           human thought, development, personality, emotion, and motivation.
         </p>
         <button className="bg-[#6F42C1] rounded-full text-white px-6 py-2 lg:mt-16 mt-6">
-          Sign Up
+          Consults
         </button>
       </div>
       <div className="md:w-1/2 w-full rounded-br-[380px] mt-10 py-3 px-5 lg:px-0 lg:py-0 lg:mt-0">
