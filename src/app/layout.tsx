@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Psychologist Website",
-  description: "Major Project Contibutors Shivbhan Kushwaha, Abhay Sharma, Ayush Jaiswal",
+  description: "Major Project Contibutors are Shivbhan Kushwaha, Abhay Sharma, Ayush Jaiswal",
 };
 
 export default function RootLayout({
@@ -17,9 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Header />
-      <body className={inter.className}>{children}</body>
-      <Footer />
+      <body className={inter.className}>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
