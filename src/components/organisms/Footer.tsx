@@ -17,13 +17,13 @@ const Footer = () => {
           <p>Connect with us on social media:</p>
           <div className="flex flex-row gap-x-5 mt-2">
             <a href="">
-              <Image src={Instagram} alt='Instagram' />
+              <Image src={Instagram} alt="Instagram" />
             </a>
             <a href="">
-              <Image src={Facebook} alt='Facebook' />
+              <Image src={Facebook} alt="Facebook" />
             </a>
             <a href="">
-              <Image src={Youtube} alt='Youtube' />
+              <Image src={Youtube} alt="Youtube" />
             </a>
           </div>
         </div>
