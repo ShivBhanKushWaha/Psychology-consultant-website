@@ -7,7 +7,7 @@ const Therapy = () => {
         <div className="py-16 lg:px-16 px-6">
             <div className="flex flex-col">
                 <div className="flex flex-col justify-center items-center">
-                    <p className="lg:text-[41px] text-3xl font-bold text-[#0C71C3] w-full sm:w-[545px] text-center">Best Online Counselling and Therapy Consultation</p>
+                    <p className="lg:text-[41px] text-3xl font-bold text-[#0C71C3] w-full sm:w-[545px] text-center leading-10">Best Online Counselling and Therapy Consultation</p>
                     <p className="text-base font-medium mt-4 text-center">Stress Free provides the best online therapy and Counseling</p>
                     <p className="text-base font-medium mt-4 text-center">consultation in India and around the globe. Consult <span className="text-[#EDB059]">Online</span></p>
                     <p className="text-base font-medium leading-7 mt-4 text-center"><span className="text-[#EDB059]">Psychologist</span>, therapist, counsellors, mental health experts via chat,</p>

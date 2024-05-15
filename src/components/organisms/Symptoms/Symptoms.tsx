@@ -6,7 +6,7 @@ const Symptoms = () => {
         <div className="bg-[#F8F5FC] py-16 sm:px-16 px-2">
             <div className="flex flex-col">
                 <div className="flex flex-col justify-center items-center">
-                    <p className="text-3xl text-[#6F42C1] font-bold text-center">Symtoms of stress & anxiety</p>
+                    <p className="text-3xl text-[#6F42C1] font-bold text-center">symptoms of stress & anxiety</p>
                     <p className="text-[15px] text-[#808081] text-center mt-3 sm:w-[515px] w-full px-4 sm:px-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt </p>
                 </div>
                 <div className="flex flex-col gap-y-10 items-center justify-center mt-8">
@@ -20,7 +20,7 @@ const Symptoms = () => {
                     </div>
                 </div>
                 <div className="flex sm:flex-row flex-col justify-between items-center xl:mx-52 lg:mx-12 sm:mx-4 sm:mt-12">
-                    <p className="text-[#6F42C1] sm:w-[60%] w-full px-4 sm:px-0 mt-5 sm:mt-0 text-center sm:text-start">Stay at home and call your doctor: <span className="text-[#808081]"> Amet minim mollit non deserunt ullamest sit aliqua dolor do amet sint.</span></p>
+                    <p className="text-[#6F42C1] sm:w-[60%] w-full px-4 sm:px-0 mt-5 sm:mt-0 text-center sm:text-start">Stay at home and chat with your doctor: <span className="text-[#808081]"> Amet minim mollit non deserunt ullamest sit aliqua dolor do amet sint.</span></p>
                     <button className="bg-[#6F42C1] rounded-full text-white px-6 py-2 mt-8 sm:mt-0">HELPLINE</button>
                 </div>
             </div>

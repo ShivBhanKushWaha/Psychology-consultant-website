@@ -18,3 +18,6 @@ export { default as Dipression} from './Manastha-Depression-counselling-service.
 export { default as Anxiety} from './Manastha-Anxiety-Counselling-Service.jpg.svg'
 export { default as RIssues} from './Manastha-Relationship-Issues-counselling-Service.jpg.svg'
 export { default as Stress} from './Manastha-Stress-Management-counselling-service.jpg.svg'
+export { default as Appointment} from './Appointment.svg'
+export { default as Home} from './home.svg'
+export { default as Arrow} from './Arrow.svg'

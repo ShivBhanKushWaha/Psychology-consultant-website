@@ -9,7 +9,6 @@ const page = () => {
         mobile: '',
         email: '',
         name: '',
-        age: '',
         password: '',
         confirmPassword: ''
     });
@@ -28,9 +27,9 @@ const page = () => {
     };
 
     return (
-        <div className="flex flex-col my-5 py-10">
-            <div className="w-full lg:rounded-l-3xl py-5 px-2 md:px-0 flex flex-col">
-                <p className="md:text-[47px] text-3xl text-[#1A1D26] font-bold uppercase text-center">Sign Up</p>
+        <div className="flex flex-col my-5 py-10 items-center">
+            <div className="flex flex-col items-center rounded-xl border-[3px] border-[#6F42C1] shadow-[#6F42C1] shadow-2xl sm:py-8 sm:px-16 py-4 px-8">
+                <p className="md:text-[47px] text-3xl text-[#180259] font-bold uppercase text-center">Sign Up</p>
                 <div className="flex items-center flex-col mt-5">
                     <div className="flex flow-row border-[3px] border-[#6F42C1] rounded-3xl items-center md:gap-3 gap-2 pl-5 bg-white h-11 md:w-[419px] w-full mt-5">
                         <Image src={User} alt='User' />
@@ -59,10 +58,10 @@ const page = () => {
 
                     <div className="flex sm:flex-row flex-col mt-4 gap-1 text-[19px]">
                         <p className="text-[#013A00]">Account already exists?</p>
-                        <button onClick={() => router.push('/signin')} className="text-[#6F42C1]">Click here to login</button>
+                        <button onClick={() => router.push('/user/signin')} className="text-[#6F42C1]">Click here to login</button>
                     </div>
 
-                    <button onClick={SignUp} className="bg-[#1A1D26] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
+                    <button onClick={SignUp} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
 
                 </div>
             </div>

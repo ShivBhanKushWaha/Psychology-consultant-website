@@ -1,0 +1,1 @@
+const BASE_URL='https:/major-project-server.render.com'
