@@ -3,6 +3,7 @@ import { Arrow } from '@assests';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const Page = () => {
   const router = useRouter();
@@ -56,6 +57,8 @@ const Page = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    toast.success('New doctor created successfully')
+    router.push('/doctor/dashboard')
     console.log(doctorData);
   };
 

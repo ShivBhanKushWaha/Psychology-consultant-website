@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const page = () => {
   const router = useRouter();
@@ -18,6 +19,8 @@ const page = () => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    toast.success('Signin success')
+    router.push('/doctor/dashboard')
     console.log(doctorData);
   };
 

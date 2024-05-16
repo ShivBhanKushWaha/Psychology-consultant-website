@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Lock, Phone, Email, User } from '@assests';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 const page = () => {
     const router = useRouter()
     const [userData, setUserData] = useState({
@@ -23,6 +24,7 @@ const page = () => {
 
     const SignUp = (e: any) => {
         e.preventDefault();
+        toast.success('New user created successfully')
         console.log(userData);
     };
 

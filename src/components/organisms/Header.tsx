@@ -59,13 +59,13 @@ const Header = () => {
               </li>
             )}
             <li>
-              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/admin">
+              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/admin/signin">
                 <Image src={AdminLogo} alt='Admin Logo' />
                 Admin
               </Link>
             </li>
             <li>
-              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/doctor/signup">
+              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/doctor/signin">
                 <Image src={DoctorLogin} alt='Doctor Logo' />
                 Doctor
               </Link>
@@ -103,7 +103,7 @@ const Header = () => {
                   <Link
                     onClick={() => setNav(!nav)}
                     className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/admin"
+                    href="/admin/signin"
                   >
                     <Image src={AdminLogo} alt='Admin Logo' />
                     Admin
