@@ -21,7 +21,7 @@ const Page = () => {
         });
     };
 
-    const signUp = async (e: any) => {
+    const signIn = async (e: any) => {
         e.preventDefault();
         toast.success('Admin signin successfully')
         router.push('/admin/dashboard')
@@ -54,7 +54,7 @@ const Page = () => {
                         <input placeholder='Enter Your Password' type="password" id="password" name="password" value={userData.password} onChange={handleChange} className="outline-none md:w-[85%] w-3/4 placeholder-text-[#1C1C1C] appearance-none" />
                     </div>
 
-                    <button onClick={signUp} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-6">SIGN UP</button>
+                    <button onClick={signIn} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-6">SIGN UP</button>
 
                 </div>
             </div>
