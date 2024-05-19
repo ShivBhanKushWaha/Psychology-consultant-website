@@ -1,1 +1,1 @@
-const BASE_URL='https:/major-project-server.render.com'
+export const SERVER_BASE_URl='https://major-project-server-lvrm.onrender.com'

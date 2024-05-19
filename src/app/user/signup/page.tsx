@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { Lock, Phone, Email, User } from '@assests';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+import { SERVER_BASE_URl } from '../../../../Config';
 const page = () => {
     const router = useRouter()
     const [userData, setUserData] = useState({
@@ -22,10 +24,51 @@ const page = () => {
         });
     };
 
-    const SignUp = (e: any) => {
-        e.preventDefault();
-        toast.success('New user created successfully')
-        console.log(userData);
+    const SignUp = async () => {
+        const { confirmPassword, ...data } = userData;
+        if(userData.email === '' || userData.mobile === '' || userData.password === '' || userData.password === ''){
+            return toast.error('Fill the form properly')
+        }
+
+        if(userData.mobile.length != 10){
+            return toast.error('Invalid mobile number')
+        }
+
+        if(userData.password.length < 5){
+            return toast.error('Password must be length of 5')
+        }
+
+        if(userData.password != userData.confirmPassword){
+            return toast.error('Password not matched')
+        }
+
+        try {
+            const res = await axios.post(`${SERVER_BASE_URl}/auth/userSignup`, data);
+            console.log(res.data.user)
+            console.log(res.data.token)
+            if (res) {
+                toast.success('New user created successfully')
+                setUserData({
+                    mobile: '',
+                    email: '',
+                    name: '',
+                    password: '',
+                    confirmPassword: '',
+                })
+                localStorage.setItem('UserToken',res.data.token);
+                router.push('/')
+            }
+        }
+        catch (error : any) {
+            if(error.response && error.response.status === 400){
+                toast.error('User Already exists')
+            }
+            else{
+                toast.error('Something went wrong')
+                console.log('error while signup new user',error.response)
+            }
+            console.log('error while signup new user',error)
+        }
     };
 
     return (
@@ -63,7 +106,7 @@ const page = () => {
                         <button onClick={() => router.push('/user/signin')} className="text-[#6F42C1]">Click here to login</button>
                     </div>
 
-                    <button onClick={SignUp} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
+                    <button onClick={() => SignUp()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
 
                 </div>
             </div>

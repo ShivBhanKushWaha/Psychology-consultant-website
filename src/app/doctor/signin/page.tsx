@@ -1,7 +1,9 @@
 'use client';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { SERVER_BASE_URl } from '../../../../Config';
 
 const page = () => {
   const router = useRouter();
@@ -17,12 +19,41 @@ const page = () => {
       [name]: value
     });
   };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    toast.success('Signin success')
-    router.push('/doctor/dashboard')
-    console.log(doctorData);
-  };
+
+    const handleSubmit = async () => {
+      if(doctorData.email === '' || doctorData.phone === '' || doctorData.password === ''){
+        return toast.error('Fill the form properly')
+    }
+
+    if(doctorData.phone.length != 10){
+        return toast.error('Invalid mobile number')
+    }
+
+    if(doctorData.password.length < 5){
+        return toast.error('Password must be length of 5')
+    }
+      try {
+        const res = await axios.post(`${SERVER_BASE_URl}/auth/signinDoctor`, doctorData);
+  
+        if (res) {
+          toast.success('Signin success')
+          router.push('/doctor/dashboard')
+          console.log(res.data.doctor);
+          console.log(res.data.token);
+          localStorage.setItem('DoctorToken', res.data.token);
+          router.push('/')
+        }
+      } catch (error: any) {
+        if (error.response && error.response.status === 400) {
+          toast.error('Doctor not  exists')
+        }
+        else {
+          toast.error('Something went wrong')
+          console.log('error while signin doctor', error.response)
+        }
+        console.log('error while signin doctor', error)
+      }
+    };
 
   return (
     <div className="flex flex-col items-center justify-center sm:py-5 sm:my-10 py-2 my-4">
@@ -35,11 +66,11 @@ const page = () => {
             <label htmlFor="phone">Phone :</label>
             <input
               placeholder="Phone Number"
-              type="tel"
+              type="number"
               id="phone"
               name="phone"
               value={doctorData.phone}
-              className="outline-none sm:w-[80%] w-[70%] "
+              className="outline-none sm:w-[80%] w-[70%] remove-arrow md:w-[85%] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder-text-[#1C1C1C]"
               onChange={handleChange}
             />
           </div>

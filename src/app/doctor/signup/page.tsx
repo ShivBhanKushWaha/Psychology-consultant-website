@@ -1,9 +1,11 @@
 'use client'
 import { Arrow } from '@assests';
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { SERVER_BASE_URl } from '../../../../Config';
 
 const Page = () => {
   const router = useRouter();
@@ -55,12 +57,43 @@ const Page = () => {
     });
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    toast.success('New doctor created successfully')
-    router.push('/doctor/dashboard')
-    console.log(doctorData);
+  const handleSubmit = async () => {
+    const emptyFields = Object.values(doctorData).filter(value => value === '');
+    if (emptyFields.length > 0) {
+      return toast.error('Please fill in all fields');
+    }
+    if (doctorData.password.length < 5) {
+      toast.error('Passwords must be length of 5');
+      return;
+    }
+    if (doctorData.password !== doctorData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    console.log(doctorData)
+    try {
+      const res = await axios.post(`${SERVER_BASE_URl}/auth/registerDoctor`, doctorData);
+
+      if (res) {
+        toast.success('New doctor created successfully');
+        router.push('/doctor/dashboard');
+        console.log(res.data.doctor);
+        console.log(res.data.token);
+        localStorage.setItem('DoctorToken', res.data.token);
+        router.push('/')
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        toast.error('Doctor Already exists')
+      }
+      else {
+        toast.error('Something went wrong')
+        console.log('error while signup new doctor', error.response)
+      }
+      console.log('error while signup new doctor', error)
+    }
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center sm:py-5 sm:my-10 py-2 my-4">
@@ -122,7 +155,7 @@ const Page = () => {
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="gender">Gender :</label>
             <div className="relative mr-4 flex flex-row w-[60%] rounded-[5px] outline-none appearance-none text-[#7C7C7C]">
-              <select id="gender" name="gender" value={doctorData.gender} onChange={handleChange} className="outline-none w-[90%] appearance-none text-[#7C7C7C] focus:outline-none">
+              <select id="gender" name="gender" value={doctorData.gender} onChange={handleChange} className="outline-none w-[90%] appearance-none text-[#7C7C7C] focus:outline-none px-2">
                 <option value="" className="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -198,7 +231,7 @@ const Page = () => {
             <p className="text-[#013A00]">Account already exists?</p>
             <button onClick={() => router.push('/doctor/signin')} className="text-[#6F42C1]">Click here to login</button>
           </div>
-          <button onClick={handleSubmit} type="submit" className="bg-[#6F42C1] w-[50%] rounded-full text-white py-2 mt-8">Register</button>
+          <button onClick={() => handleSubmit()} type="submit" className="bg-[#6F42C1] w-[50%] rounded-full text-white py-2 mt-8">Register</button>
         </div>
       </div>
     </div>

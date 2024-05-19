@@ -5,6 +5,7 @@ import { Lock, Phone, Email } from '@assests';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { SERVER_BASE_URl } from '../../../../Config';
 
 const Page = () => {
     const router = useRouter();
@@ -21,21 +22,39 @@ const Page = () => {
         });
     };
 
-    const signIn = async (e: any) => {
-        e.preventDefault();
-        toast.success('Admin signin successfully')
-        router.push('/admin/dashboard')
-        // try {
-        //     const res = await axios.post(`${BASE_URL}/auth/signin`, userData);
+    const signIn = async () => {
+        if(userData.email === ''){
+            return toast.error('Enter correct email')
+        }
+        if(userData.password === ''){
+            toast.error('Enter correct password')
+        }
+        try {
+            const res = await axios.post(`${SERVER_BASE_URl}/auth/adminin`, userData);
 
-        //     if (res) {
-
-        //     }
-        // }
-        // catch (error) {
-        //     console.log(error)
-        // }
-        console.log(userData);
+            if (res) {
+                console.log(res.data.admin)
+                console.log(res.data.token)
+                setUserData({
+                    email: '',
+                    password: '',
+                })
+                router.push('/admin')
+                toast.success('Admin signin successfully')
+                localStorage.setItem('AdminToken', res.data.token);
+                router.push('/')
+            }
+        }
+        catch (error: any) {
+            if (error.response && error.response.status === 400) {
+                toast.error('Doctor not  exists')
+            }
+            else {
+                toast.error('Something went wrong')
+                console.log('error while signin doctor', error.response)
+            }
+            console.log('error while signin doctor', error)
+        }
     };
 
     return (
@@ -54,7 +73,7 @@ const Page = () => {
                         <input placeholder='Enter Your Password' type="password" id="password" name="password" value={userData.password} onChange={handleChange} className="outline-none md:w-[85%] w-3/4 placeholder-text-[#1C1C1C] appearance-none" />
                     </div>
 
-                    <button onClick={signIn} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-6">SIGN UP</button>
+                    <button onClick={() => signIn()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-6">SIGN UP</button>
 
                 </div>
             </div>

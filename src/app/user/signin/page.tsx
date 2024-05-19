@@ -5,7 +5,7 @@ import { Lock, Phone, Email } from '@assests'; // Assuming this is a valid impor
 import { useRouter } from 'next/navigation'; // Corrected import path
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import { SERVER_BASE_URl } from '../../../../Config';
 const Page = () => {
     const router = useRouter();
     const [userData, setUserData] = useState({
@@ -22,20 +22,46 @@ const Page = () => {
         });
     };
 
-    const signUp = async (e: any) => {
-        e.preventDefault();
-        toast.success('user signin successfully')
+    const signUp = async () => {
+        if(userData.email === '' || userData.mobile === '' || userData.password === ''){
+            return toast.error('Fill the form properly')
+        }
+
+        if(userData.mobile.length != 10){
+            return toast.error('Invalid mobile number')
+        }
+
+        if(userData.password.length < 5){
+            return toast.error('Password must be length of 5')
+        }
+
         try {
-            const res = await axios.post(`${BASE_URL}/auth/signin`, userData);
+            const res = await axios.post(`${SERVER_BASE_URl}/auth/userLogin`, userData);
 
             if (res) {
-
+                console.log(res.data.user)
+                console.log(res.data.token)
+                router.push('/doctor')
+                setUserData({
+                    mobile: '',
+                    email: '',
+                    password: '',
+                })
+                toast.success('User signin Success')
+                localStorage.setItem('UserToken', res.data.token);
+                router.push('/')
             }
         }
-        catch (error) {
-            console.log(error)
+        catch (error: any) {
+            if (error.response && error.response.status === 400) {
+                toast.error('User not found')
+            }
+            else {
+                toast.error('Something went wrong')
+                console.log('error while signin  user', error.response)
+            }
+            console.log('error while signin  user', error)
         }
-        console.log(userData);
     };
 
     return (
@@ -63,7 +89,7 @@ const Page = () => {
                         <button onClick={() => router.push('/user/signup')} className="text-[#6F42C1]">Click here to Signup</button>
                     </div>
 
-                    <button onClick={signUp} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
+                    <button onClick={() => signUp()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN IN</button>
 
                 </div>
             </div>
