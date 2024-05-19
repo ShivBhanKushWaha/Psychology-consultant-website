@@ -29,7 +29,7 @@ const Header = () => {
     <nav className="w-full">
       <div className="flex items-center justify-between md:px-8 md:py-5 px-4 py-1  bg-[#6F42C1]">
         <Image
-          className="md:w-52 md:pl-3 w-32 h-10 object-contain"
+          className="rounded-xl md:w-fit md:pl-0 w-32 h-10 object-contain"
           src={Logo}
           alt={'Logo'}
           onClick={() => router.push('/')}
