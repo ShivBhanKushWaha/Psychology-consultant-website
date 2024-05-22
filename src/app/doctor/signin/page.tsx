@@ -8,7 +8,6 @@ import { SERVER_BASE_URl } from '../../../../Config';
 const page = () => {
   const router = useRouter();
   const [doctorData, setDoctorData] = useState({
-    phone: '',
     email: '',
     password: '',
   });
@@ -21,13 +20,6 @@ const page = () => {
   };
 
     const handleSubmit = async () => {
-      if(doctorData.email === '' || doctorData.phone === '' || doctorData.password === ''){
-        return toast.error('Fill the form properly')
-    }
-
-    if(doctorData.phone.length != 10){
-        return toast.error('Invalid mobile number')
-    }
 
     if(doctorData.password.length < 5){
         return toast.error('Password must be length of 5')
@@ -63,18 +55,6 @@ const page = () => {
         </h2>
         <div className="flex flex-col items-center justify-center sm:mt-8 mt-4">
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-5 bg-white h-11 sm:w-[510px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="phone">Phone :</label>
-            <input
-              placeholder="Phone Number"
-              type="number"
-              id="phone"
-              name="phone"
-              value={doctorData.phone}
-              className="outline-none sm:w-[80%] w-[70%] remove-arrow md:w-[85%] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder-text-[#1C1C1C]"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-5 bg-white h-11 sm:w-[510px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="email">Email :</label>
             <input
               placeholder="Valid Email"
@@ -94,7 +74,7 @@ const page = () => {
               id="password"
               name="password"
               value={doctorData.password}
-              className="outline-none sm:w-[80%] w-[60%] "
+              className="outline-none sm:w-[75%] w-[60%] "
               onChange={handleChange}
             />
           </div>

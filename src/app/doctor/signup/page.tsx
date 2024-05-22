@@ -19,8 +19,8 @@ const Page = () => {
     city: '',
     state: '',
     zipCode: '',
-    graduationDegree: '',
-    postGraduationDegree: '',
+    ugDegree: '',
+    pgDegree: '',
     instituteName: '',
     otherQualification: '',
     gender: '',
@@ -70,9 +70,15 @@ const Page = () => {
       toast.error('Passwords do not match');
       return;
     }
-    console.log(doctorData)
+    
     try {
-      const res = await axios.post(`${SERVER_BASE_URl}/auth/registerDoctor`, doctorData);
+
+      const doctorDataToSend = {
+        ...doctorData,
+        availability: JSON.stringify(doctorData.availability),
+      };
+  
+      const res = await axios.post(`${SERVER_BASE_URl}/auth/registerDoctor`, doctorDataToSend);
 
       if (res) {
         toast.success('New doctor created successfully');
@@ -137,12 +143,12 @@ const Page = () => {
             <input placeholder='Postal Code' type="text" id="zipCode" name="zipCode" value={doctorData.zipCode} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="graduationDegree">UG Degree :</label>
-            <input placeholder='UG' type="text" id="graduationDegree" name="graduationDegree" value={doctorData.graduationDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
+            <label htmlFor="ugDegree">UG Degree :</label>
+            <input placeholder='UG' type="text" id="ugDegree" name="ugDegree" value={doctorData.ugDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="postGraduationDegree">PG Degree :</label>
-            <input placeholder='PG' type="text" id="postGraduationDegree" name="postGraduationDegree" value={doctorData.postGraduationDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
+            <label htmlFor="pgDegree">PG Degree :</label>
+            <input placeholder='PG' type="text" id="pgDegree" name="pgDegree" value={doctorData.pgDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="instituteName">Institute Name :</label>

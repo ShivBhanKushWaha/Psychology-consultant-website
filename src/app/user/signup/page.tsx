@@ -9,7 +9,7 @@ import { SERVER_BASE_URl } from '../../../../Config';
 const page = () => {
     const router = useRouter()
     const [userData, setUserData] = useState({
-        mobile: '',
+        mobileNumber: '',
         email: '',
         name: '',
         password: '',
@@ -26,12 +26,12 @@ const page = () => {
 
     const SignUp = async () => {
         const { confirmPassword, ...data } = userData;
-        if(userData.email === '' || userData.mobile === '' || userData.password === '' || userData.password === ''){
+        if(userData.email === '' || userData.mobileNumber === '' || userData.password === '' || userData.password === ''){
             return toast.error('Fill the form properly')
         }
 
-        if(userData.mobile.length != 10){
-            return toast.error('Invalid mobile number')
+        if(userData.mobileNumber.length != 10){
+            return toast.error('Invalid mobileNumber number')
         }
 
         if(userData.password.length < 5){
@@ -49,7 +49,7 @@ const page = () => {
             if (res) {
                 toast.success('New user created successfully')
                 setUserData({
-                    mobile: '',
+                    mobileNumber: '',
                     email: '',
                     name: '',
                     password: '',
@@ -83,7 +83,7 @@ const page = () => {
 
                     <div className="flex flow-row border-[3px] border-[#6F42C1] rounded-3xl items-center md:gap-3 gap-2 pl-5 bg-white h-11 md:w-[419px] w-full mt-5">
                         <Image src={Phone} alt='Phone' />
-                        <input name='mobile' placeholder='Mobile Number' type='number' id="mobile" inputMode="numeric" value={userData.mobile} onChange={handleChange} className="remove-arrow outline-none md:w-[85%] w-3/4 placeholder-text-[#1C1C1C] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                        <input name='mobileNumber' placeholder='mobileNumber Number' type='number' id="mobileNumber" inputMode="numeric" value={userData.mobileNumber} onChange={handleChange} className="remove-arrow outline-none md:w-[85%] w-3/4 placeholder-text-[#1C1C1C] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
                     </div>
 
                     <div className="flex flow-row border-[3px] border-[#6F42C1] rounded-3xl items-center md:gap-3 gap-2 pl-5 bg-white h-11 md:w-[419px] w-full mt-5">
