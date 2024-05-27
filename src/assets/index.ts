@@ -21,3 +21,4 @@ export { default as Stress} from './Manastha-Stress-Management-counselling-servi
 export { default as Appointment} from './Appointment.svg'
 export { default as Home} from './home.svg'
 export { default as Arrow} from './Arrow.svg'
+export { default as CurrentUser} from './currentUser.svg'

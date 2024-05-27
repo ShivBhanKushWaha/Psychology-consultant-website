@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation'; // Corrected import path
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { SERVER_BASE_URl } from '../../../../Config';
+import { useAppContext } from '../../Context/context';
 const Page = () => {
     const router = useRouter();
+    const { resUserData, setResUserData, userType, setUserType } = useAppContext()
     const [userData, setUserData] = useState({
         mobile: '',
         email: '',
@@ -22,16 +24,16 @@ const Page = () => {
         });
     };
 
-    const signUp = async () => {
-        if(userData.email === '' || userData.mobile === '' || userData.password === ''){
+    const signIn = async () => {
+        if (userData.email === '' || userData.mobile === '' || userData.password === '') {
             return toast.error('Fill the form properly')
         }
 
-        if(userData.mobile.length != 10){
+        if (userData.mobile.length != 10) {
             return toast.error('Invalid mobile number')
         }
 
-        if(userData.password.length < 5){
+        if (userData.password.length < 5) {
             return toast.error('Password must be length of 5')
         }
 
@@ -41,14 +43,16 @@ const Page = () => {
             if (res) {
                 console.log(res.data.user)
                 console.log(res.data.token)
-                router.push('/doctor')
+                resUserData(res.data.user)
+                setUserType('user')
+                router.push('/Appointment')
                 setUserData({
                     mobile: '',
                     email: '',
                     password: '',
                 })
                 toast.success('User signin Success')
-                localStorage.setItem('UserToken', res.data.token);
+                localStorage.setItem('token', res.data.token);
                 router.push('/')
             }
         }
@@ -89,7 +93,7 @@ const Page = () => {
                         <button onClick={() => router.push('/user/signup')} className="text-[#6F42C1]">Click here to Signup</button>
                     </div>
 
-                    <button onClick={() => signUp()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN IN</button>
+                    <button onClick={() => signIn()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN IN</button>
 
                 </div>
             </div>

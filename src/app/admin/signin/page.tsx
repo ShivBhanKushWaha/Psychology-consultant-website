@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { SERVER_BASE_URl } from '../../../../Config';
+import { useAppContext } from '../../Context/context';
 
 const Page = () => {
     const router = useRouter();
+    const { resUserData, setResUserData, userType, setUserType } = useAppContext()
     const [userData, setUserData] = useState({
         email: '',
         password: '',
@@ -35,6 +37,8 @@ const Page = () => {
             if (res) {
                 console.log(res.data.admin)
                 console.log(res.data.token)
+                setResUserData(res.data.admin)
+                setUserType('admin')
                 setUserData({
                     email: '',
                     password: '',
@@ -47,7 +51,7 @@ const Page = () => {
         }
         catch (error: any) {
             if (error.response && error.response.status === 400) {
-                toast.error('Doctor not  exists')
+                toast.error('Admin not exists')
             }
             else {
                 toast.error('Something went wrong')

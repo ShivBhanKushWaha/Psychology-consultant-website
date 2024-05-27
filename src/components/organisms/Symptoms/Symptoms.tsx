@@ -6,8 +6,8 @@ const Symptoms = () => {
         <div className="bg-[#F8F5FC] py-16 sm:px-16 px-2">
             <div className="flex flex-col">
                 <div className="flex flex-col justify-center items-center">
-                    <p className="text-3xl md:text-5xl text-[#6F42C1] font-bold text-center">symptoms of stress & anxiety</p>
-                    <p className="text-md text-[#808081] text-center mt-3 sm:w-[515px] w-full px-4 sm:px-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt </p>
+                    <p className="text-3xl md:text-5xl text-[#6F42C1] font-bold text-center">Symptoms of Stress & Anxiety</p>
+                    {/* <p className="text-md text-[#808081] text-center mt-3 sm:w-[515px] w-full px-4 sm:px-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Amet minim mollit non deserunt </p> */}
                 </div>
                 <div className="flex flex-col gap-y-10 items-center justify-center mt-8">
                     <div className="flex sm:flex-row flex-col xl:gap-x-36 gap-x-12 sm:gap-x-4 gap-y-10">

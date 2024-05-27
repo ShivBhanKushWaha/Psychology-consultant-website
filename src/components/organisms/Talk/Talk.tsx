@@ -9,7 +9,7 @@ const talk = () => {
                 <div className="lg:w-1/2 w-full flex flex-col items-center">
                     <p className="text-[28px] font-medium text-[#0C71C3] mt-8 text-center">Talk To A Psychologist</p>
                     <p className="text-base font-bold text-[#0C71C3] mt-8 text-center">India’s Best Online Therapy and Counselling Consultation</p>
-                    <p className="text-base font-bold text-[#0C71C3] mt-8 w-[90%] leading-7 text-center">Website. Manastha provides the best <span className="text-[#EDB059]">online psychologist </span>
+                    <p className="text-base font-bold text-[#0C71C3] mt-8 w-[90%] leading-7 text-center">Website. Stress Free provides the best <span className="text-[#EDB059]">online psychologist </span>
                          consultation and counsellors appointment in India and the globe.</p>
                     <p className="text-base font-bold text-[#0C71C3] mt-8 w-[90%] text-center">We give you the right psychologist for your mental and
                         emotional health.</p>

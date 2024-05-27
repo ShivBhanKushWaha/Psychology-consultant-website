@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { SERVER_BASE_URl } from '../../../../Config';
-
+import { useAppContext } from '../../Context/context';
 const Page = () => {
   const router = useRouter();
+  const { resUserData, setResUserData, userType, setUserType } = useAppContext()
   const [doctorData, setDoctorData] = useState({
     name: '',
     phone: '',
@@ -85,7 +86,9 @@ const Page = () => {
         router.push('/doctor/dashboard');
         console.log(res.data.doctor);
         console.log(res.data.token);
-        localStorage.setItem('DoctorToken', res.data.token);
+        setResUserData(res.data.doctor)
+          setUserType('doctor')
+        localStorage.setItem('token', res.data.token);
         router.push('/')
       }
     } catch (error: any) {
@@ -147,12 +150,16 @@ const Page = () => {
             <input placeholder='UG' type="text" id="ugDegree" name="ugDegree" value={doctorData.ugDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
+            <label htmlFor="instituteName">Institute (UG) :</label>
+            <input placeholder='Institute (UG)' type="text" id="instituteName" name="instituteName" value={doctorData.instituteName} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
+          </div>
+          <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="pgDegree">PG Degree :</label>
             <input placeholder='PG' type="text" id="pgDegree" name="pgDegree" value={doctorData.pgDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="instituteName">Institute Name :</label>
-            <input placeholder='Institute Name' type="text" id="instituteName" name="instituteName" value={doctorData.instituteName} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
+            <label htmlFor="instituteName">Institute (PG) :</label>
+            <input placeholder='Institute (PG)' type="text" id="instituteName" name="instituteName" value={doctorData.instituteName} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="otherQualification">Other Qualification :</label>
@@ -205,10 +212,10 @@ const Page = () => {
               ))}
             </div>
           </div>
-          <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
+          {/* <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="timeSlot">Time Slot :</label>
             <input placeholder='Minutes per slot' type="text" id="timeSlot" name="timeSlot" className="outline-none sm:w-[80%] w-[60%] " value={doctorData.timeSlot} onChange={handleChange} />
-          </div>
+          </div> */}
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="password">Password :</label>
             <input

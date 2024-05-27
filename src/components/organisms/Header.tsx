@@ -2,12 +2,24 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Logo, Menu, Close, AdminLogo, DoctorLogin, UserLogin, Appointment, Home } from '@assests';
+import { Logo, Menu, Close, AdminLogo, DoctorLogin, UserLogin, Appointment, Home, CurrentUser } from '@assests';
 import { useRouter, usePathname } from 'next/navigation';
+import { useAppContext } from '../../app/Context/context';
+import { ProfileModal } from '@molecules';
 const Header = () => {
-  const [nav, setNav] = useState(false);
   const router = useRouter();
   const pathName = usePathname()
+  const [nav, setNav] = useState(false);
+  const { resUserData, setResUserData, userType, setUserType } = useAppContext()
+  const [hoverProfile, setHoverProfile] = useState(false)
+  const [showHoverProfile, setShowHoverProfile] = useState(false);
+  const handleMouseEnter = () => {
+    setShowHoverProfile(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowHoverProfile(false);
+  };
   useEffect(() => {
     function handleNav() {
       if (window.innerWidth > 767) {
@@ -49,39 +61,63 @@ const Header = () => {
         </button>
 
         <div className="hidden w-full md:block md:w-auto">
-          <ul className="flex font-normal text-white flex-row p-3 md:p-2 mt-4 rounded-lg  md:space-x-8 md:mt-0 md:border-0 items-center justify-center">
+          <ul className="flex font-normal text-white flex-row p-3 md:p-2 mt-4 rounded-lg md:mt-0 md:border-0 items-center justify-center">
             {pathName !== '/' && (
-              <li>
-                <Link className="text-base items-center justify-center flex flex-row gap-2" href="/">
-                  <Image src={Home} alt="Home Logo" />
-                  Home
-                </Link>
+              <li onClick={() => router.push("/")} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0">
+                <Image src={Home} alt="Home Logo" />
+                Home
               </li>
             )}
-            <li>
-              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/admin/signin">
-                <Image src={AdminLogo} alt='Admin Logo' />
-                Admin
-              </Link>
+            <li className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/admin/signin")}>
+              <Image src={AdminLogo} alt='Admin Logo' />
+              Admin
             </li>
-            <li>
-              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/doctor/signin">
-                <Image src={DoctorLogin} alt='Doctor Logo' />
-                Doctor
-              </Link>
+
+
+            <li className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/doctor/signin")}>
+              <Image src={DoctorLogin} alt='Doctor Logo' />
+              Doctor
             </li>
-            <li>
-              <Link className="text-base relative items-center justify-center flex flex-row gap-2" href="/">
-                <Image src={Appointment} alt='Doctor Logo' />
-                Appointment
-              </Link>
+            <li className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/appointment")}>
+              <Image src={Appointment} alt='Doctor Logo' />
+              Appointment
             </li>
-            <li>
-              <Link className="text-base items-center justify-center flex flex-row gap-2" href="/user/signin">
-                <Image src={UserLogin} alt='Doctor Logo' />
-                User
-              </Link>
-            </li>
+
+            {
+              <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                {resUserData?.id && (
+                  resUserData?.image ? (
+                    <Image
+                      src={`${resUserData?.image}`}
+                      width={40}
+                      height={40}
+                      alt='User Profile'
+                      className="cursor-pointer rounded-full relative"
+                    />
+                  ) : (
+                    <Image
+                      src={CurrentUser}
+                      alt='Default Profile'
+                      className="cursor-pointer"
+                    />
+                  )
+                )}
+                {(hoverProfile || showHoverProfile) && (
+                  <div
+                    onMouseEnter={() => setHoverProfile(true)}
+                    onMouseLeave={() => setHoverProfile(false)}
+                    className="absolute"
+                  >
+                    <ProfileModal setHoverProfile={setHoverProfile} setShowHoverProfile={setShowHoverProfile} />
+                  </div>
+                )}
+              </div>
+            }
+            {
+              (!resUserData?.id) &&
+              <li onClick={() => router.push('/user/signin')} className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2"><Image src={UserLogin} alt='Doctor Logo' />
+                User</li>
+            }
           </ul>
         </div>
 
@@ -109,26 +145,38 @@ const Header = () => {
                     Admin
                   </Link>
                 </li>
+                {
+                  userType !== 'doctor' || userType === "" ? <li className="px-4 cursor-pointer capitalize py-2">
+                    <Link
+                      onClick={() => setNav(!nav)}
+                      className="text-base items-center justify-center flex flex-row gap-2"
+                      href="/doctor/signup"
+                    >
+                      <Image src={DoctorLogin} alt='Doctor Logo' />
+                      Doctor
+                    </Link>
+                  </li> : <li className="px-4 cursor-pointer capitalize py-2">
+                    <Link
+                      onClick={() => setNav(!nav)}
+                      className="text-base items-center justify-center flex flex-row gap-2"
+                      href="/doctor/dashboard"
+                    >
+                      <Image src={DoctorLogin} alt='Doctor Logo' />
+                      Dashboard
+                    </Link>
+                  </li>
+                }
                 <li className="px-4 cursor-pointer capitalize py-2">
                   <Link
                     onClick={() => setNav(!nav)}
                     className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/doctor/signup"
-                  >
-                    <Image src={DoctorLogin} alt='Doctor Logo' />
-                    Doctor
-                  </Link>
-                </li>
-                <li className="px-4 cursor-pointer capitalize py-2">
-                  <Link
-                    onClick={() => setNav(!nav)}
-                    className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/"
+                    href="/Appointment"
                   >
                     <Image src={Appointment} alt='Doctor Logo' />
                     Appointment
                   </Link>
                 </li>
+
                 <li className="px-4 cursor-pointer capitalize py-2">
                   <Link
                     onClick={() => setNav(!nav)}

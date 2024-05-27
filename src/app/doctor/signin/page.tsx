@@ -4,9 +4,11 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { SERVER_BASE_URl } from '../../../../Config';
+import { useAppContext } from '../../Context/context';
 
 const page = () => {
   const router = useRouter();
+  const { resUserData, setResUserData, userType, setUserType } = useAppContext()
   const [doctorData, setDoctorData] = useState({
     email: '',
     password: '',
@@ -32,7 +34,9 @@ const page = () => {
           router.push('/doctor/dashboard')
           console.log(res.data.doctor);
           console.log(res.data.token);
-          localStorage.setItem('DoctorToken', res.data.token);
+          setResUserData(res.data.doctor)
+          setUserType('doctor')
+          localStorage.setItem('token', res.data.token);
           router.push('/')
         }
       } catch (error: any) {

@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { SERVER_BASE_URl } from '../../../../Config';
+import { useAppContext } from '../../Context/context';
 const page = () => {
     const router = useRouter()
+    const { resUserData, setResUserData, userType, setUserType } = useAppContext()
     const [userData, setUserData] = useState({
         mobileNumber: '',
         email: '',
@@ -26,19 +28,19 @@ const page = () => {
 
     const SignUp = async () => {
         const { confirmPassword, ...data } = userData;
-        if(userData.email === '' || userData.mobileNumber === '' || userData.password === '' || userData.password === ''){
+        if (userData.email === '' || userData.mobileNumber === '' || userData.password === '' || userData.password === '') {
             return toast.error('Fill the form properly')
         }
 
-        if(userData.mobileNumber.length != 10){
+        if (userData.mobileNumber.length != 10) {
             return toast.error('Invalid mobileNumber number')
         }
 
-        if(userData.password.length < 5){
+        if (userData.password.length < 5) {
             return toast.error('Password must be length of 5')
         }
 
-        if(userData.password != userData.confirmPassword){
+        if (userData.password != userData.confirmPassword) {
             return toast.error('Password not matched')
         }
 
@@ -48,6 +50,9 @@ const page = () => {
             console.log(res.data.token)
             if (res) {
                 toast.success('New user created successfully')
+                resUserData(res.data.user)
+                setUserType('user')
+                router.push('/Appointment')
                 setUserData({
                     mobileNumber: '',
                     email: '',
@@ -55,19 +60,19 @@ const page = () => {
                     password: '',
                     confirmPassword: '',
                 })
-                localStorage.setItem('UserToken',res.data.token);
+                localStorage.setItem('token', res.data.token);
                 router.push('/')
             }
         }
-        catch (error : any) {
-            if(error.response && error.response.status === 400){
+        catch (error: any) {
+            if (error.response && error.response.status === 400) {
                 toast.error('User Already exists')
             }
-            else{
+            else {
                 toast.error('Something went wrong')
-                console.log('error while signup new user',error.response)
+                console.log('error while signup new user', error.response)
             }
-            console.log('error while signup new user',error)
+            console.log('error while signup new user', error)
         }
     };
 
