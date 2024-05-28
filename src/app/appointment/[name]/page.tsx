@@ -1,11 +1,11 @@
 'use client'
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 const page = () => {
   const { name } = useParams();
-
+const router = useRouter()
   // Mock data for the example, you can fetch real data based on `name`
   const doctor = {
     name: name ? name : 'Doctor',
@@ -16,6 +16,7 @@ const page = () => {
   };
   const SubmitDetails = () => {
     toast.success('Details send')
+    router.push(`/appointment/${name}/patient`)
   }
   return (
     <div className="container mx-auto my-8">
