@@ -170,7 +170,7 @@ const Header = () => {
                   <Link
                     onClick={() => setNav(!nav)}
                     className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/Appointment"
+                    href="/appointment"
                   >
                     <Image src={Appointment} alt='Doctor Logo' />
                     Appointment
