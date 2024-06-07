@@ -5,7 +5,7 @@ import { Lock, Phone, Email } from '@assests';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { SERVER_BASE_URl } from '../../../../Config';
+import { SERVER_BASE_URL } from '../../../../Config';
 import { useAppContext } from '../../Context/context';
 
 const Page = () => {
@@ -32,7 +32,7 @@ const Page = () => {
             toast.error('Enter correct password')
         }
         try {
-            const res = await axios.post(`${SERVER_BASE_URl}/auth/admin`, userData);
+            const res = await axios.post(`${SERVER_BASE_URL}/auth/admin`, userData);
 
             if (res) {
                 console.log(res.data.admin)
