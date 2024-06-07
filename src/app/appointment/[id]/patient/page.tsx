@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 const Page = () => {
   const [patientDetails, setPatientDetails] = useState({
+    refDoctorId:'',
     memberName: '',
     age: '',
     gender: '',

@@ -5,7 +5,7 @@ import { Lock, Phone, Email } from '@assests'; // Assuming this is a valid impor
 import { useRouter } from 'next/navigation'; // Corrected import path
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { SERVER_BASE_URl } from '../../../../Config';
+import { SERVER_BASE_URL } from '../../../../Config';
 import { useAppContext } from '../../Context/context';
 const Page = () => {
     const router = useRouter();
@@ -38,7 +38,7 @@ const Page = () => {
         }
 
         try {
-            const res = await axios.post(`${SERVER_BASE_URl}/auth/userLogin`, userData);
+            const res = await axios.post(`${SERVER_BASE_URL}/auth/userLogin`, userData);
 
             if (res) {
                 console.log(res.data.user)

@@ -5,7 +5,7 @@ import { Lock, Phone, Email, User } from '@assests';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { SERVER_BASE_URl } from '../../../../Config';
+import { SERVER_BASE_URL } from '../../../../Config';
 import { useAppContext } from '../../Context/context';
 const page = () => {
     const router = useRouter()
@@ -45,7 +45,7 @@ const page = () => {
         }
 
         try {
-            const res = await axios.post(`${SERVER_BASE_URl}/auth/userSignup`, data);
+            const res = await axios.post(`${SERVER_BASE_URL}/auth/userSignup`, data);
             console.log(res.data.user)
             console.log(res.data.token)
             if (res) {

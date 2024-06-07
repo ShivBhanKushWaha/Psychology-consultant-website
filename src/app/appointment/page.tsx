@@ -1,34 +1,39 @@
 // pages/appointments.tsx
-import React from 'react';
-import {DoctorCard} from '@molecules';
+'use client'
+import React, { useEffect, useState } from 'react';
+import { DoctorCard } from '@molecules';
+import axios from 'axios';
+import { SERVER_BASE_URL } from '../../../Config';
 
 const page = () => {
-  const doctors = [
-    {
-      name: 'Shiv Prajapati',
-      specialty: 'Cardiologist',
-      experience: '10',
-      image: 'https://via.placeholder.com/150'
-    },
-    {
-      name: 'Abhay Sharma',
-      specialty: 'Dermatologist',
-      experience: '7',
-      image: 'https://via.placeholder.com/150'
-    },
-    {
-      name: 'Ayush Jaiswal',
-      specialty: 'Pediatrician',
-      experience: '5',
-      image: 'https://via.placeholder.com/150'
-    },
-    {
-      name: 'You & Me',
-      specialty: 'General Physician',
-      experience: '15',
-      image: 'https://via.placeholder.com/150'
-    }
-  ];
+
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+
+    const fetchDoctorList = async () => {
+      setLoading(true)
+      try {
+        const res = await axios.get(`${SERVER_BASE_URL}/doctorList`);
+        setDoctors(res.data); // Assume res.data is the list of doctors.
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      } finally {
+        setLoading(false)
+      }
+    };
+
+    fetchDoctorList();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto my-8">
@@ -43,3 +48,7 @@ const page = () => {
 };
 
 export default page;
+function getDoctorList() {
+  throw new Error('Function not implemented.');
+}
+

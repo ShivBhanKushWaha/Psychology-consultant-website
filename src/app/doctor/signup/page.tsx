@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { SERVER_BASE_URl } from '../../../../Config';
+import { SERVER_BASE_URL } from '../../../../Config';
 import { useAppContext } from '../../Context/context';
 const Page = () => {
   const router = useRouter();
@@ -79,7 +79,7 @@ const Page = () => {
         availability: JSON.stringify(doctorData.availability),
       };
   
-      const res = await axios.post(`${SERVER_BASE_URl}/auth/registerDoctor`, doctorDataToSend);
+      const res = await axios.post(`${SERVER_BASE_URL}/auth/registerDoctor`, doctorDataToSend);
 
       if (res) {
         toast.success('New doctor created successfully');

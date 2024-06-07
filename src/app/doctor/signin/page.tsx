@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { SERVER_BASE_URl } from '../../../../Config';
+import { SERVER_BASE_URL } from '../../../../Config';
 import { useAppContext } from '../../Context/context';
 
 const page = () => {
@@ -27,7 +27,7 @@ const page = () => {
         return toast.error('Password must be length of 5')
     }
       try {
-        const res = await axios.post(`${SERVER_BASE_URl}/auth/signinDoctor`, doctorData);
+        const res = await axios.post(`${SERVER_BASE_URL}/auth/signinDoctor`, doctorData);
   
         if (res) {
           toast.success('Signin success')
