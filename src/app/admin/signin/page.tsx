@@ -25,10 +25,10 @@ const Page = () => {
     };
 
     const signIn = async () => {
-        if(userData.email === ''){
+        if (userData.email === '') {
             return toast.error('Enter correct email')
         }
-        if(userData.password === ''){
+        if (userData.password === '') {
             toast.error('Enter correct password')
         }
         try {
