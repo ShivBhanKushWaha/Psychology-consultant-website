@@ -71,14 +71,14 @@ const Page = () => {
       toast.error('Passwords do not match');
       return;
     }
-    
+
     try {
 
       const doctorDataToSend = {
         ...doctorData,
         availability: JSON.stringify(doctorData.availability),
       };
-  
+
       const res = await axios.post(`${SERVER_BASE_URL}/auth/registerDoctor`, doctorDataToSend);
 
       if (res) {
@@ -87,7 +87,7 @@ const Page = () => {
         console.log(res.data.doctor);
         console.log(res.data.token);
         setResUserData(res.data.doctor)
-          setUserType('doctor')
+        setUserType('doctor')
         localStorage.setItem('token', res.data.token);
         router.push('/')
       }
