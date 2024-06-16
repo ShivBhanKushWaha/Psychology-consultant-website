@@ -35,6 +35,12 @@ const page = () => {
     );
   }
 
+  if (!doctors) {
+    <div className="flex justify-center items-center h-screen">
+      <p>No Doctor Available</p>
+    </div>
+  }
+
   return (
     <div className="container mx-auto my-8">
       <h2 className="text-3xl text-center font-bold mb-8 text-[#6F42C1]">Available Doctors</h2>
