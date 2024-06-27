@@ -30,6 +30,7 @@ interface Doctor {
 
 const DoctorPage = () => {
   const { id } = useParams();
+  console.log(id)
   const router = useRouter();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(false);

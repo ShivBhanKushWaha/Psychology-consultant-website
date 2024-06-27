@@ -1,11 +1,12 @@
 "use client"
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
+import BarGraph from './BarGraph'; // Import the BarGraph component
 
 interface SummaryProps {
     doctors: Doctor[];
     patients: Patient[];
-    appointments: Appointment[];
 }
 
 type Doctor = {
@@ -16,14 +17,6 @@ type Doctor = {
 type Patient = {
     name: string;
     status: string;
-    Paid: string;
-    fees: string;
-}
-
-type Appointment = {
-    fees: number;
-    status: string;
-    time: string;
 }
 
 type SummaryDataType = {
@@ -33,72 +26,80 @@ type SummaryDataType = {
     }
 }
 
-const Summary: React.FC<SummaryProps> = ({ doctors, patients, appointments }) => {
+const Summary: React.FC<SummaryProps> = ({ doctors, patients }) => {
+    const router = useRouter();
     const [summaryData, setSummaryData] = useState<SummaryDataType>({
         doctors: {
-            label: 'Total Doctor',
-            digit: 10
-        },
-        verifiedDoctors: {
-            label: 'Total Verified Doctor',
-            digit: 0
-        },
-        unVerifiedDoctors: {
-            label: 'Total UnVerified Doctor',
+            label: 'Total Doctors',
             digit: 0
         },
         patients: {
-            label: 'Total Patient',
+            label: 'Total Patients',
             digit: 0
-        },
-        paidAppointment: {
-            label: 'Paid Appointment',
-            digit: 0
-        },
-        unpaidAppointment: {
-            label: 'Unpaid/cancel Appointment',
-            digit: 0
-        },
-    })
+        }
+    });
 
     useEffect(() => {
-        setSummaryData((prev) => {
-            let tempData = { ...prev }
+        setSummaryData({
+            doctors: {
+                label: 'Total Doctors',
+                digit: doctors.length
+            },
+            patients: {
+                label: 'Total Patients',
+                digit: patients.length
+            }
+        });
+    }, [doctors, patients]);
 
-            const paidAppointments = appointments.filter((appointment) => appointment.status === 'paid');
-            const unPaidAppointments = appointments.filter((appointment) => appointment.status === 'unpaid' || appointment.status === 'cancelled');
+    // Prepare data for BarGraph
+    const graphData = [
+        {
+            day: "Doctors",
+            date: "",
+            totalAmount: summaryData.doctors.digit
+        },
+        {
+            day: "Patients",
+            date: "",
+            totalAmount: summaryData.patients.digit
+        }
+    ];
 
-            const verifiedDoctors = doctors.filter((doctor) => doctor.status === 'verified');
-            const unVerifiedDoctors = doctors.filter((doctor) => doctor.status === 'unverified');
-
-            tempData.doctors.digit = doctors.length;
-            tempData.verifiedDoctors.digit = verifiedDoctors.length;
-            tempData.unVerifiedDoctors.digit = unVerifiedDoctors.length;
-            tempData.paidAppointment.digit = paidAppointments.length;
-            tempData.unpaidAppointment.digit = unPaidAppointments.length;
-            tempData.patients.digit = patients.length;
-
-            return tempData
-        })
-    }, [doctors, appointments, patients])
-
-    const summaryKeys = Object.keys(summaryData)
+    const handleDoctorsClick = () => {
+        router.push('/admin/dashboard/all_doctors');
+    };
+    const handlePatientClick = () => {
+        router.push('/admin/dashboard/all_patient');
+    };
 
     return (
         <div className="max-w-[1150px] m-auto">
-            <div className="grid grid-cols-2 gap-3 max-h-50vh overflow-y-auto">
-                {
-                    summaryKeys && summaryKeys.map((key) => (
-                        <div key={key} className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition">
-                            <div className="text-xl md:text-4xl font-bold">
-                                {summaryData[key].digit}
-                            </div>
-                            <div className="text-center">
-                                {summaryData[key].label}
-                            </div>
-                        </div>
-                    ))
-                }
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-50vh overflow-y-auto">
+                <div
+                    className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100"
+                    onClick={handleDoctorsClick}
+                >
+                    <div className="text-xl md:text-4xl font-bold">
+                        {summaryData.doctors.digit}
+                    </div>
+                    <div className="text-center">
+                        {summaryData.doctors.label}
+                    </div>
+                </div>
+                <div onClick={handlePatientClick} className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100">
+                    <div className="text-xl md:text-4xl font-bold">
+                        {summaryData.patients.digit}
+                    </div>
+                    <div className="text-center">
+                        {summaryData.patients.label}
+                    </div>
+                </div>
+            </div>
+
+            {/* Bar Graph Integration */}
+            <div className="mt-8">
+                <BarGraph data={graphData} />
             </div>
         </div>
     );

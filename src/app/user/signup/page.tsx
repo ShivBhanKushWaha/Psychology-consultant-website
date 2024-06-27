@@ -72,7 +72,7 @@ const page = () => {
                 toast.error('Something went wrong')
                 console.log('error while signup new user', error.response)
             }
-            console.log('error while signup new user', error)
+            // console.log('error while signup new user', error)
         }
     };
 

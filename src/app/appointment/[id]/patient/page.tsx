@@ -1,47 +1,118 @@
 'use client'
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { SERVER_BASE_URL } from '../../../../../Config';
+import { useParams, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+// Define the PatientDetails interface
+interface PatientDetails {
+  doctorId: string;
+  memberName: string;
+  age: string;
+  gender: string;
+  contact: string;
+  mentalIssue: string;
+  symptoms: string;
+  diagnosis: string;
+  treatment: string;
+  whichMember: string;
+  symptomsOfPatient: string;
+  startTime: string;
+  prevPatientTreatment: string;
+  freqOfSymptoms: string;
+  triggerPoint: string;
+  capacity: string;
+  sleepProper: string;
+  timeOfSleep: string;
+  eatingProper: string;
+  interestedDoSomething: string;
+  notinterestedDoSomething: string;
+  selfTime: string;
+  notSelfTime: string;
+}
+
+type PatientDetailsKeys = keyof PatientDetails;
 
 const Page = () => {
-  const [patientDetails, setPatientDetails] = useState({
-    refDoctorId:'',
+  const {id} = useParams()
+  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [patientDetails, setPatientDetails] = useState<PatientDetails>({
+    doctorId: '',
     memberName: '',
     age: '',
     gender: '',
     contact: '',
-    mentalIsuue: '',
+    mentalIssue: 'no',
     symptoms: '',
-    diagnosys: '',
+    diagnosis: '',
     treatment: '',
     whichMember: '',
     symptomsOfPatient: '',
     startTime: '',
     prevPatientTreatment: '',
-    feqOfSymptoms: '',
+    freqOfSymptoms: 'daily',
     triggerPoint: '',
     capacity: '',
-    sleepProper: '',
+    sleepProper: 'yes',
     timeOfSleep: '',
     eatingProper: '',
-    interestedDoSomeThing: '',
-    notInterestedDoSomeThing: '',
-    selfTime: '',
+    interestedDoSomething: 'yes',
+    notinterestedDoSomething: '',
+    selfTime: 'yes',
     notSelfTime: ''
   });
+  console.log(patientDetails)
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    console.log(name)
-    console.log(value)
+    console.log(name,value)
     setPatientDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission
-    alert(`Patient Details:\nName: ${patientDetails.memberName}\nAge: ${patientDetails.age}\nGender: ${patientDetails.gender}\nContact: ${patientDetails.contact}`);
+  // Set the doctorId to the extracted 'id' from the URL when the component mounts or 'id' changes
+  useEffect(() => {
+    if (id) {
+      setPatientDetails((prevDetails) => ({
+        ...prevDetails,
+        doctorId: id as string, // Ensuring id is a string type
+      }));
+    }
+  }, [id]);
+
+  const handleSubmit = async () => {
+    const requiredFields: PatientDetailsKeys[] = ['memberName', 'age', 'gender', 'contact', 'symptomsOfPatient','triggerPoint','capacity'];
+    for (let field of requiredFields) {
+      if (!patientDetails[field]) {
+        setError(`The field "${field}" is required.`);
+        return;
+      }
+    }
+    setLoading(true)
+    try {
+      // Use SERVER_BASE_URL if it's defined
+      const res = await axios.post(`${SERVER_BASE_URL}/patient/details`, patientDetails);
+      router.push('/')
+      toast.success('Doctor will contact soon!')
+    } catch (error: any) {
+      console.error("Error sending patient details:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 text-lg">Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center my-5 mx-2">
@@ -70,14 +141,14 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Gender:</label>
-          <input
-            type="text"
-            name="gender"
-            value={patientDetails.gender}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
-          />
+          <select id="gender" name="gender" value={patientDetails.gender} onChange={handleChange} className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+            <option value="" className="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
         </div>
+
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Contact Number:</label>
           <input
@@ -90,12 +161,13 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">History of mental Issue:</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
-            <option value="yes">Yes</option>
+          <select onChange={handleChange} name='mentalIssue' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="no">No</option>
+            <option value="yes">Yes</option>
           </select>
         </div>
-        {
+        {patientDetails.mentalIssue == 'yes' && <>
+
           <div>
             <div className="mb-4">
               <label className="block mb-1 text-gray-700">Symptoms:</label>
@@ -108,11 +180,11 @@ const Page = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-1 text-gray-700">Diagnosys:</label>
+              <label className="block mb-1 text-gray-700">diagnosis:</label>
               <input
                 type="text"
-                name="diagnosys"
-                value={patientDetails.diagnosys}
+                name="diagnosis"
+                value={patientDetails.diagnosis}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
               />
@@ -138,6 +210,7 @@ const Page = () => {
               />
             </div>
           </div>
+        </>
         }
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Symptoms of patient:</label>
@@ -151,7 +224,7 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">When problem start:</label>
-          <input type="date" className="sm:w-2/3 w-full px-3 py-2" />
+          <input id='startTime' name='startTime' onChange={handleChange} type="date" className="sm:w-2/3 w-full px-3 py-2" />
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Previous Patient treatment:</label>
@@ -165,10 +238,10 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Freq of symptoms:</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
-            <option value="">Daily</option>
-            <option value="">Monthly</option>
-            <option value="">Yearly</option>
+          <select onChange={handleChange} id='freqOfSymptoms' name='freqOfSymptoms' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+            <option value="daily">Daily</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
           </select>
         </div>
         <div className="mb-4">
@@ -195,12 +268,12 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Sleep proper:</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} name='sleepProper' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
-        {
+        {patientDetails.sleepProper == "no" && <>
           <div className="mb-4">
             <label className="block mb-1 text-gray-700">Time of sleep hourly:</label>
             <input
@@ -211,60 +284,68 @@ const Page = () => {
               className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
             />
           </div>
+        </>
         }
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Eating properly:</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} id='eatingProper' name='eatingProper' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Interested to do some thing</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} name='interestedDoSomething' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         {
-          <div className="mb-4">
-            <label className="block mb-1 text-gray-700">Not Interested:</label>
-            <input
-              type="text"
-              name="notInterestedDoSomeThing"
-              value={patientDetails.notInterestedDoSomeThing}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
-            />
-          </div>
+          patientDetails.interestedDoSomething == "no" && <>
+            <div className="mb-4">
+              <label className="block mb-1 text-gray-700">Not Interested:</label>
+              <input
+                type="text"
+                name="notinterestedDoSomething"
+                value={patientDetails.notinterestedDoSomething}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
+              />
+            </div>
+          </>
         }
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Quality time for themselves</label>
-          <select className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} name='selfTime' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         {
-          <div className="mb-4">
-            <label className="block mb-1 text-gray-700">No themselves:</label>
-            <input
-              type="text"
-              name="notSelfTime"
-              value={patientDetails.notSelfTime}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
-            />
-          </div>
+          patientDetails.selfTime == "no" && <>
+            <div className="mb-4">
+              <label className="block mb-1 text-gray-700">No themselves:</label>
+              <input
+                type="text"
+                name="notSelfTime"
+                value={patientDetails.notSelfTime}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
+              />
+            </div>
+          </>
         }
         <div className="flex flex-row justify-center items-center mt-3">
           <button
             onClick={handleSubmit}
-            className=" bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70"
+            disabled={loading}
+            className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
+              }`}
           >
-            Submit
+            {loading ? "Loading..." : "Submit"}
           </button>
         </div>
+
       </div>
     </div>
   );

@@ -30,10 +30,7 @@ const Admin = async () => {
   return (
     <div className="pt-8">
       <Container>
-        <Summary doctors={doctors} patients={patients} appointments={appointments} />
-        <div className="mt-4 mx-auto max-w[1150px]">
-          {/* <BarGraph data={graphData} /> */}
-        </div>
+        <Summary doctors={doctors} patients={patients} />
       </Container>
     </div>
   )

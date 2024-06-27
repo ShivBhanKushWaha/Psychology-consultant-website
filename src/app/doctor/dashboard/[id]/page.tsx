@@ -88,7 +88,7 @@ const PatientPage = () => {
           />
         </div>
         <div>
-          <label className="text-2xl text-[#6F42C1] font-semibold mt-4" htmlFor="Mediation">Mediation</label>
+          <label className="text-2xl text-[#6F42C1] font-semibold mt-4" htmlFor="Medication">Medication</label>
           <textarea
             className="w-full resize-none border mt-1 border-[#6F42C1] rounded-xl outline-none appearance-none p-2 mb-4"
             rows={4}
@@ -110,7 +110,7 @@ const PatientPage = () => {
 
         <div className="flex flex-row gap-x-3 items-center justify-center">
           <input type="checkbox" onClick={() => setChecked(true)}/>
-          <p className="text-base text-[#6F42C1] text-opacity-80">I agre with rules & regulution of doctor</p>
+          <p className="text-base text-[#6F42C1] text-opacity-80">I agree with rules & regulation of doctor</p>
         </div>
         <div className="flex flex-row items-center justify-center mt-2">
           <button

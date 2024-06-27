@@ -14,23 +14,24 @@ const Page = () => {
     name: '',
     phone: '',
     email: '',
-    availability: [] as string[],
+    specialization: '',
     address1: '',
     address2: '',
     city: '',
     state: '',
     zipCode: '',
     ugDegree: '',
+    instituteNameUg: '',
     pgDegree: '',
-    instituteName: '',
+    instituteNamePg: '',
     otherQualification: '',
     gender: '',
-    specialization: '',
     fees: '',
-    timeSlot: '',
+    availability: [] as string[],
     password: '',
     confirmPassword: ''
   });
+  console.log(doctorData)
 
   const availableSlot: string[] = [
     "9 - 11 PM",
@@ -60,6 +61,7 @@ const Page = () => {
 
   const handleSubmit = async () => {
     const emptyFields = Object.values(doctorData).filter(value => value === '');
+    console.log(emptyFields)
     if (emptyFields.length > 0) {
       return toast.error('Please fill in all fields');
     }
@@ -150,16 +152,16 @@ const Page = () => {
             <input placeholder='UG' type="text" id="ugDegree" name="ugDegree" value={doctorData.ugDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="instituteName">Institute (UG) :</label>
-            <input placeholder='Institute (UG)' type="text" id="instituteName" name="instituteName" value={doctorData.instituteName} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
+            <label htmlFor="instituteNameUg">Institute (UG) :</label>
+            <input placeholder='Institute (UG)' type="text" id="instituteNameUg" name="instituteNameUg" value={doctorData.instituteNameUg} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="pgDegree">PG Degree :</label>
             <input placeholder='PG' type="text" id="pgDegree" name="pgDegree" value={doctorData.pgDegree} className="outline-none sm:w-[80%] w-[60%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="instituteName">Institute (PG) :</label>
-            <input placeholder='Institute (PG)' type="text" id="instituteName" name="instituteName" value={doctorData.instituteName} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
+            <label htmlFor="instituteNamePg">Institute (PG) :</label>
+            <input placeholder='Institute (PG)' type="text" id="instituteNamePg" name="instituteNamePg" value={doctorData.instituteNamePg} className="outline-none sm:w-[70%] w-[35%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="otherQualification">Other Qualification :</label>
@@ -212,10 +214,6 @@ const Page = () => {
               ))}
             </div>
           </div>
-          {/* <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label htmlFor="timeSlot">Time Slot :</label>
-            <input placeholder='Minutes per slot' type="text" id="timeSlot" name="timeSlot" className="outline-none sm:w-[80%] w-[60%] " value={doctorData.timeSlot} onChange={handleChange} />
-          </div> */}
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="password">Password :</label>
             <input

@@ -7,20 +7,23 @@ import { SERVER_BASE_URL } from '../../../Config';
 
 const page = () => {
 
-  const [doctors, setDoctors] = useState([]);
+  const [doctorsList, setDoctorsList] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [error, setError] = useState(null);
   useEffect(() => {
 
     const fetchDoctorList = async () => {
       setLoading(true)
       try {
+        // Use SERVER_BASE_URL if it's defined
         const res = await axios.get(`${SERVER_BASE_URL}/doctorList`);
-        setDoctors(res.data); // Assume res.data is the list of doctors.
-      } catch (error) {
+        setDoctorsList(res.data);
+        console.log('Fetched doctors:', res.data);
+      } catch (error : any) {
         console.error("Error fetching doctors:", error);
+        setError(error.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
 
@@ -35,7 +38,16 @@ const page = () => {
     );
   }
 
-  if (!doctors) {
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Error loading doctors: {error}</p>
+      </div>
+    );
+  }
+
+
+  if (!doctorsList) {
     <div className="flex justify-center items-center h-screen">
       <p>No Doctor Available</p>
     </div>
@@ -45,7 +57,7 @@ const page = () => {
     <div className="container mx-auto my-8">
       <h2 className="text-3xl text-center font-bold mb-8 text-[#6F42C1]">Available Doctors</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-2">
-        {doctors.map((doctor, index) => (
+        {doctorsList.map((doctor, index) => (
           <DoctorCard key={index} doctor={doctor} />
         ))}
       </div>
@@ -54,7 +66,5 @@ const page = () => {
 };
 
 export default page;
-function getDoctorList() {
-  throw new Error('Function not implemented.');
-}
+
 
