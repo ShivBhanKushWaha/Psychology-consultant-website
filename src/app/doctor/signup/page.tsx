@@ -130,7 +130,7 @@ const Page = () => {
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="experience">Experience :</label>
-            <input placeholder='Experience' type="text" id="experience" name="experience" value={doctorData.experience} className="outline-none sm:w-[75%] w-[50%] " onChange={handleChange} />
+            <input placeholder='Experience in years' type="text" id="experience" name="experience" value={doctorData.experience} className="outline-none sm:w-[75%] w-[50%] " onChange={handleChange} />
           </div>
           <div className="flex flow-row sm:justify-between border-[3px] border-[#6F42C1] rounded-3xl items-center sm:gap-3 gap-2 pl-2 bg-white h-11 sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label htmlFor="address1">Address 1 :</label>

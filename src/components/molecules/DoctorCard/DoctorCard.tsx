@@ -11,7 +11,7 @@ interface DoctorCardProps {
         specialization: string;
         city: string;
         experience: number;
-        fees: Float32Array;
+        fees: string;
     };
 }
 
