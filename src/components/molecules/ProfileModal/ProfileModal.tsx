@@ -1,5 +1,5 @@
 'use client'
-// import { HelpIcon, LogoutIcon, ProfileIcon } from '@assests'
+
 import Image from 'next/image'
 import React from 'react'
 import { useRouter } from 'next/navigation'
@@ -41,16 +41,13 @@ const ProfileModal = ({ setHoverProfile, setShowHoverProfile }: any) => {
     return (
         <div className="flex flex-col py-6 bg-white rounded-[10px] shadow-2xl pl-6 pr-24 -ml-32 mt-8 gap-y-3">
             <div className="flex flex-row gap-x-8 cursor-pointer" onClick={() => handleProfile()}>
-                {/* <Image src={ProfileIcon} alt='Profile Icon' /> */}
-                <p>Profile</p>
+                <p className="text-black">Profile</p>
             </div>
             <div className="flex flex-row gap-x-8 cursor-pointer" onClick={() => handleHelp()}>
-                {/* <Image src={HelpIcon} alt='Profile Icon' /> */}
-                <p>Prescription</p>
+                <p className="text-black">Prescription</p>
             </div>
             <div className="flex flex-row gap-x-8 cursor-pointer" onClick={() => handleLogout()}>
-                {/* <Image src={LogoutIcon} alt='Profile Icon' /> */}
-                <p>Logout</p>
+                <p className="text-black">Logout</p>
             </div>
         </div>
     )

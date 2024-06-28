@@ -7,26 +7,26 @@ import toast from 'react-hot-toast';
 // Define the PatientDetails interface
 interface PatientDetails {
   doctorId: string;
-  memberName: string;
+  familyMember: string;
   age: string;
   gender: string;
-  contact: string;
-  mentalIssue: string;
+  contactNumber: string;
+  historyOfMentalIssue: string;
   symptoms: string;
   diagnosis: string;
   treatment: string;
-  whichMember: string;
+  whichFamilyMember: string;
   symptomsOfPatient: string;
-  startTime: string;
-  prevPatientTreatment: string;
+  whenProblemStart: string;
+  previousPatientTreatment: string;
   freqOfSymptoms: string;
   triggerPoint: string;
-  capacity: string;
+  capacityofWork: string;
   sleepProper: string;
   timeOfSleep: string;
-  eatingProper: string;
-  interestedDoSomething: string;
-  notinterestedDoSomething: string;
+  eatingProperly: string;
+  interestedToDoSomething: string;
+  notInterested: string;
   selfTime: string;
   notSelfTime: string;
 }
@@ -34,40 +34,39 @@ interface PatientDetails {
 type PatientDetailsKeys = keyof PatientDetails;
 
 const Page = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   const router = useRouter()
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [patientDetails, setPatientDetails] = useState<PatientDetails>({
     doctorId: '',
-    memberName: '',
+    familyMember: '',
     age: '',
     gender: '',
-    contact: '',
-    mentalIssue: 'no',
+    contactNumber: '',
+    historyOfMentalIssue: 'no',
     symptoms: '',
     diagnosis: '',
     treatment: '',
-    whichMember: '',
+    whichFamilyMember: '',
     symptomsOfPatient: '',
-    startTime: '',
-    prevPatientTreatment: '',
+    whenProblemStart: '',
+    previousPatientTreatment: '',
     freqOfSymptoms: 'daily',
     triggerPoint: '',
-    capacity: '',
+    capacityofWork: '',
     sleepProper: 'yes',
     timeOfSleep: '',
-    eatingProper: '',
-    interestedDoSomething: 'yes',
-    notinterestedDoSomething: '',
+    eatingProperly: '',
+    interestedToDoSomething: 'yes',
+    notInterested: '',
     selfTime: 'yes',
-    notSelfTime: ''
+    notSelfTime: '',
   });
-  console.log(patientDetails)
-
+  console.log(patientDetails.capacityofWork)
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    console.log(name,value)
+    console.log(name, value)
     setPatientDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
@@ -85,7 +84,7 @@ const Page = () => {
   }, [id]);
 
   const handleSubmit = async () => {
-    const requiredFields: PatientDetailsKeys[] = ['memberName', 'age', 'gender', 'contact', 'symptomsOfPatient','triggerPoint','capacity'];
+    const requiredFields: PatientDetailsKeys[] = ['familyMember', 'age', 'gender', 'contactNumber', 'symptomsOfPatient', 'triggerPoint', 'capacityofWork'];
     for (let field of requiredFields) {
       if (!patientDetails[field]) {
         setError(`The field "${field}" is required.`);
@@ -95,14 +94,30 @@ const Page = () => {
     setLoading(true)
     try {
       // Use SERVER_BASE_URL if it's defined
-      const res = await axios.post(`${SERVER_BASE_URL}/patient/details`, patientDetails);
-      router.push('/')
-      toast.success('Doctor will contact soon!')
+      const selectSlot = localStorage.getItem('selectSlot');
+      console.log(selectSlot)
+      console.log(patientDetails)
+      if (selectSlot) {
+        const patientData = {
+          ...patientDetails,
+          selectSlot,
+          capacityOfWork: patientDetails.capacityofWork  // Ensure capacityOfWork is included
+        };
+        console.log(patientData)
+        const res = await axios.post(`${SERVER_BASE_URL}/patient/details`, patientData);
+        router.push('/')
+        toast.success('Doctor will contact soon!')
+      }
+      else {
+        toast.error('Select a slot')
+      }
+
     } catch (error: any) {
       console.error("Error sending patient details:", error);
       setError(error.message);
     } finally {
       setLoading(false);
+      localStorage.removeItem('selectSlot')
     }
   };
 
@@ -119,12 +134,12 @@ const Page = () => {
       <div className="rounded-xl border-[3px] border-[#6F42C1] shadow-[#6F42C1] shadow-2xl sm:w-[70%] md:w-[65%] lg:w-1/2 w-full mx-auto sm:py-8 sm:px-16 py-3 px-2">
         <h1 className="text-2xl font-bold mb-4 text-[#6F42C1] text-center">Patient Details Form</h1>
         <div className="mb-4">
-          <label htmlFor='memberName' className="block mb-1 text-gray-700">Family member:</label>
+          <label htmlFor='familyMember' className="block mb-1 text-gray-700">Family member:</label>
           <input
-            id='memberName'
+            id='familyMember'
             type="text"
-            name="memberName"
-            value={patientDetails.memberName}
+            name="familyMember"
+            value={patientDetails.familyMember}
             onChange={handleChange}
             className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
           />
@@ -153,20 +168,20 @@ const Page = () => {
           <label className="block mb-1 text-gray-700">Contact Number:</label>
           <input
             type="text"
-            name="contact"
-            value={patientDetails.contact}
+            name="contactNumber"
+            value={patientDetails.contactNumber}
             onChange={handleChange}
             className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
           />
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">History of mental Issue:</label>
-          <select onChange={handleChange} name='mentalIssue' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} name='historyOfMentalIssue' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="no">No</option>
             <option value="yes">Yes</option>
           </select>
         </div>
-        {patientDetails.mentalIssue == 'yes' && <>
+        {patientDetails.historyOfMentalIssue == 'yes' && <>
 
           <div>
             <div className="mb-4">
@@ -203,8 +218,8 @@ const Page = () => {
               <label className="block mb-1 text-gray-700">Which Family member:</label>
               <input
                 type="text"
-                name="whichMember"
-                value={patientDetails.whichMember}
+                name="whichFamilyMember"
+                value={patientDetails.whichFamilyMember}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
               />
@@ -224,14 +239,14 @@ const Page = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">When problem start:</label>
-          <input id='startTime' name='startTime' onChange={handleChange} type="date" className="sm:w-2/3 w-full px-3 py-2" />
+          <input id='whenProblemStart' name='whenProblemStart' onChange={handleChange} type="date" className="sm:w-2/3 w-full px-3 py-2" />
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Previous Patient treatment:</label>
           <input
             type="text"
-            name="prevPatientTreatment"
-            value={patientDetails.prevPatientTreatment}
+            name="previousPatientTreatment"
+            value={patientDetails.previousPatientTreatment}
             onChange={handleChange}
             className="w-full px-3 py-2 border active:outline-none rounded-lg outline-none focus:outline-none "
           />
@@ -248,6 +263,7 @@ const Page = () => {
           <label className="block mb-1 text-gray-700">Trigger point:</label>
           <input
             type="text"
+            placeholder='Trigger point'
             name="triggerPoint"
             value={patientDetails.triggerPoint}
             onChange={handleChange}
@@ -259,9 +275,10 @@ const Page = () => {
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Capacity of work:</label>
           <input
+            placeholder='Capacity of work'
             type="text"
-            name="capacity"
-            value={patientDetails.capacity}
+            name="capacityofWork"
+            value={patientDetails.capacityofWork}
             onChange={handleChange}
             className="w-full px-3 py-2 border active:outline-none rounded-lg outline-none focus:outline-none "
           />
@@ -288,26 +305,26 @@ const Page = () => {
         }
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Eating properly:</label>
-          <select onChange={handleChange} id='eatingProper' name='eatingProper' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} id='eatingProperly' name='eatingProperly' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         <div className="mb-4">
           <label className="block mb-1 text-gray-700">Interested to do some thing</label>
-          <select onChange={handleChange} name='interestedDoSomething' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
+          <select onChange={handleChange} name='interestedToDoSomething' className="sm:w-2/3 w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none">
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
         </div>
         {
-          patientDetails.interestedDoSomething == "no" && <>
+          patientDetails.interestedToDoSomething == "no" && <>
             <div className="mb-4">
               <label className="block mb-1 text-gray-700">Not Interested:</label>
               <input
                 type="text"
-                name="notinterestedDoSomething"
-                value={patientDetails.notinterestedDoSomething}
+                name="notInterested"
+                value={patientDetails.notInterested}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border active:outline-none rounded-lg focus:outline-none"
               />

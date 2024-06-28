@@ -5,7 +5,7 @@ import { PopUpModal } from '@molecules'; // Adjust the import path if necessary
 
 interface PatientDetailsProp {
     id: number;
-    name: string;
+    familyName: string;
     gender: string;
     age: number;
     appointmentDate: string;
@@ -39,7 +39,7 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
                 </div>
                 {patients.map((patient, index) => (
                     <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.name}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyName}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.appointmentDate}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full rounded-md bg-[#6F42C1] flex items-center justify-center">
@@ -78,7 +78,7 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
                     title="Patient Details"
                 >
                     <div className="p-4">
-                        <h3 className="text-xl font-bold mb-2 text-[#6F42C1]">{selectedPatient.name}</h3>
+                        <h3 className="text-xl font-bold mb-2 text-[#6F42C1]">{selectedPatient.familyName}</h3>
                         <p><strong>Gender:</strong> {selectedPatient.gender}</p>
                         <p><strong>Age:</strong> {selectedPatient.age}</p>
                         <p><strong>Appointment Date:</strong> {selectedPatient.appointmentDate}</p>

@@ -26,109 +26,59 @@ interface Doctor {
   otherQualification?: string;
   instituteNameUg: string;
   instituteNamePg: string;
-  timeSlot: string;
+  unBookedSlote:string[]
 }
 
 const DoctorPage = () => {
   const { id } = useParams();
   console.log(id)
   const router = useRouter();
-  // const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  console.log(doctor)
   const [loading, setLoading] = useState(false);
-  // const [slots, setSlots] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const slots = [
-    "09:00 - 09:30",
-    "09:30 - 10:00",
-    "10:00 - 10:30",
-    "10:30 - 11:00",
-    "11:00 - 11:30",
-    "11:30 - 12:00",
-    "12:00 - 12:30",
-    "12:30 - 13:00",
-    "13:00 - 13:30",
-    "13:30 - 14:00",
-    "14:00 - 14:30",
-    "14:30 - 15:00",
-    "15:00 - 15:30",
-    "15:30 - 16:00",
-    "16:00 - 16:30",
-    "16:30 - 17:00"
-  ]
 
-  const doctor: Doctor = {
-    id: 4,
-    name: "Dr. Sarah Lee",
-    specialization: "Dermatologist",
-    experience: 12,
-    gender: "Female",
-    address1: "123 Birch St",
-    city: "San Francisco",
-    state: "CA",
-    zipCode: "94101",
-    phone: "(415) 234-5678",
-    email: "sarah.lee@example.com",
-    availability: "Wednesday to Sunday, 11 AM - 7 PM",
-    fees: 130,
-    ugDegree: "MBBS",
-    pgDegree: "MD Dermatology",
-    instituteNameUg: "University of California, Berkeley",
-    instituteNamePg: "University of Southern California",
-    timeSlot: "30 minutes"
-  };
-  
+  useEffect(() => {
+    if (!id) return; // Guard against missing id
 
-  // useEffect(() => {
-  //   if (!id) return; // Guard against missing id
+    setLoading(true);
+    const fetchDoctor = async () => {
+      try {
+        const res = await axios.get(`${SERVER_BASE_URL}/doctor/${id}`);
+        setDoctor(res.data); // Assume res.data is the doctor object.
+      } catch (error) {
+        console.error("Error fetching doctor details:", error);
+        toast.error("Failed to load doctor details");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   setLoading(true);
-  //   const fetchDoctor = async () => {
-  //     try {
-  //       const res = await axios.get(`${SERVER_BASE_URL}/doctor/${id}`);
-  //       // setDoctor(res.data); // Assume res.data is the doctor object.
-  //     } catch (error) {
-  //       console.error("Error fetching doctor details:", error);
-  //       toast.error("Failed to load doctor details");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchDoctor();
-  // }, [id]);
+    fetchDoctor();
+  }, [id]);
 
   const handleConfirmClick = async () => {
-    await fetchAvailableSlots();
     setShowModal(true);
   };
 
-  const fetchAvailableSlots = async () => {
-    try {
-      const res = await axios.get(`${SERVER_BASE_URL}/doctor/${id}/available-slots`);
-      // setSlots(res.data.slots);
-    } catch (error) {
-      console.error("Error fetching available slots:", error);
-      toast.error("Failed to load available slots");
-    }
-  };
 
   const handleSlotSelect = async (slot: string) => {
     setShowModal(false);
     console.log(slot)
     try {
       // Send the selected slot to the server to book it
-      const res = await axios.post(`${SERVER_BASE_URL}/appointment/book`, {
-        doctorId: doctor?.id,
-        slot,
-      });
-      toast.success('Slot booked successfully');
+      // const res = await axios.post(`${SERVER_BASE_URL}/appointment/book`, {
+      //   doctorId: doctor?.id,
+      //   slot,
+      // });
+      // toast.success('Slot booked successfully');
 
-      // Generate Google Meet link and send email to user and doctor
-      const meetRes = await axios.post(`${SERVER_BASE_URL}/appointment/generate-meet-link`, {
-        appointmentId: res.data.appointmentId,
-      });
-      toast.success('Google Meet link sent to your email');
-
+      // // Generate Google Meet link and send email to user and doctor
+      // const meetRes = await axios.post(`${SERVER_BASE_URL}/appointment/generate-meet-link`, {
+      //   appointmentId: res.data.appointmentId,
+      // });
+      // toast.success('Google Meet link sent to your email');
+      localStorage.setItem('selectSlot',slot)
       router.push(`/appointment/${doctor?.id}/patient`);
     } catch (error) {
       console.error("Error booking slot:", error);
@@ -162,12 +112,8 @@ const DoctorPage = () => {
       </div>
       <div className="mt-6 space-y-4 text-center">
         <p><span className="font-bold">Gender:</span> {doctor.gender}</p>
-        <p><span className="font-bold">Email:</span> {doctor.email}</p>
-        <p><span className="font-bold">Phone:</span> {doctor.phone}</p>
         <p><span className="font-bold">Address:</span> {`${doctor.address1}, ${doctor.address2 ? `${doctor.address2}, ` : ''}${doctor.city}, ${doctor.state} ${doctor.zipCode}`}</p>
-        <p><span className="font-bold">Availability:</span> {doctor.availability}</p>
         <p><span className="font-bold">Consultation Fees:</span> ${doctor.fees}</p>
-        <p><span className="font-bold">Time Slot:</span> {doctor.timeSlot}</p>
         <p><span className="font-bold">Undergraduate Degree:</span> {doctor.ugDegree}</p>
         <p><span className="font-bold">Postgraduate Degree:</span> {doctor.pgDegree}</p>
         {doctor.otherQualification && <p><span className="font-bold">Other Qualifications:</span> {doctor.otherQualification}</p>}
@@ -184,7 +130,7 @@ const DoctorPage = () => {
       </div>
       {showModal && (
         <SlotModal
-          slots={slots}
+          slots={doctor.unBookedSlote}
           onClose={() => setShowModal(false)}
           onSelectSlot={handleSlotSelect}
         />
