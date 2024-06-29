@@ -54,7 +54,7 @@ const Page = () => {
                 toast.error('Admin not exists')
             }
             else {
-                toast.error('Something went wrong')
+                // toast.error('Something went wrong')
                 console.log('error while signin doctor', error.response)
             }
             console.log('error while signin doctor', error)

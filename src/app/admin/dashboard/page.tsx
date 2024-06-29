@@ -19,14 +19,6 @@ const Admin = async () => {
     { name: "Charlie Green", status: "Under Treatment", Paid: "Yes", fees: "3000" },
   ];
 
-  const appointments = [
-    { fees: 1500, status: "paid", time: "10:00 AM" },
-    { fees: 1500, status: "paid", time: "10:00 AM" },
-    { fees: 1500, status: "unpaid", time: "10:00 AM" },
-    { fees: 2000, status: "paid", time: "11:00 AM" },
-    { fees: 2000, status: "unpaid", time: "11:00 AM" },
-    { fees: 3000, status: "cancelled", time: "12:00 PM" },
-  ];
   return (
     <div className="pt-8">
       <Container>

@@ -18,7 +18,7 @@ const ProfileModal = ({ setHoverProfile, setShowHoverProfile }: any) => {
     const handleHelp = () => {
         setHoverProfile(false);
         setShowHoverProfile(false)
-        router.push('/help')
+        router.push('/user/prescription')
     }
 
     const handleLogout = async () => {

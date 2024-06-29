@@ -50,9 +50,8 @@ const page = () => {
             console.log(res.data.token)
             if (res) {
                 toast.success('New user created successfully')
-                resUserData(res.data.user)
+                setResUserData(res.data.user)
                 setUserType('user')
-                router.push('/Appointment')
                 setUserData({
                     mobileNumber: '',
                     email: '',
@@ -61,18 +60,14 @@ const page = () => {
                     confirmPassword: '',
                 })
                 localStorage.setItem('token', res.data.token);
-                router.push('/')
+                router.push('/appointment')
             }
         }
         catch (error: any) {
             if (error.response && error.response.status === 400) {
                 toast.error('User Already exists')
             }
-            else {
-                toast.error('Something went wrong')
-                console.log('error while signup new user', error.response)
-            }
-            // console.log('error while signup new user', error)
+            console.log('error while signup new user', error)
         }
     };
 

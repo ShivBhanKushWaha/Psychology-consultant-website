@@ -43,7 +43,7 @@ const Page = () => {
             if (res) {
                 console.log(res.data.user)
                 console.log(res.data.token)
-                resUserData(res.data.user)
+                setResUserData(res.data.user)
                 setUserType('user')
                 router.push('/Appointment')
                 setUserData({

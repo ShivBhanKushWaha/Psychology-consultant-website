@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PopUpModal } from '@molecules'; // Adjust the import path if necessary
+import axios from 'axios';
+import { SERVER_BASE_URL } from '../../../../../Config';
 
 // Define the Patient interface
 interface Patient {
@@ -23,7 +25,27 @@ interface Patient {
 const Page = () => {
     const router = useRouter();
     const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    // const [patients, setPatients] = useState([]); // State to store patient data
+    const [loading, setLoading] = useState(true); // State to manage loading
+    const [error, setError] = useState<string | null>(null); // State to manage errors
+    // console.log(patients)
+    const doctorName = 'Shiv Prajapati';
+    // useEffect(() => {
+    //     const fetchPatients = async () => {
+    //         try {
+    //             const response = await axios.get(`${SERVER_BASE_URL}/patients`); // Replace with your API endpoint
+    //             setPatients(response.data); // Set the fetched data
+    //             console.log(response.data)
+    //             setLoading(false); // Set loading to false
+    //         } catch (error) {
+    //             console.error('Error fetching patient details:', error);
+    //             setError('Failed to load patient details'); // Set error message
+    //             setLoading(false); // Set loading to false
+    //         }
+    //     };
 
+    //     fetchPatients();
+    // }, []);
     const patients: Patient[] = [
         {
             id: 1,
@@ -68,6 +90,7 @@ const Page = () => {
             fees: "3000"
         }
     ];
+
 
     return (
         <div className="px-4 py-6 bg-white rounded-lg shadow-md">
