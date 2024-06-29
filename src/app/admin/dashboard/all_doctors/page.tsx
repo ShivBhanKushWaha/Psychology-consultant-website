@@ -1,108 +1,67 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { SERVER_BASE_URL } from '../../../../../Config';
 
 // Define the Doctor interface
 interface Doctor {
     id: number;
     name: string;
-    phone: string;
-    email: string;
     specialization: string;
-    address1: string;
-    address2?: string;
     city: string;
     state: string;
-    zipCode: string;
-    ugDegree: string;
-    pgDegree?: string;
-    instituteName: string;
-    otherQualification?: string;
-    gender: string;
     fees: number;
-    availability: string;
-    timeSlot: string;
-    experience: number; // Years of experience
-    patients: number; // Total number of patients handled by the doctor
+    experience: string; // Experience in years, as a string
+    _count: {
+        patientDetails: number; // Total number of patients handled by the doctor
+    };
 }
 
-// Sample data for doctors
-const doctors: Doctor[] = [
-    {
-        id: 1,
-        name: 'Dr. John Doe',
-        phone: '123-456-7890',
-        email: 'john.doe@example.com',
-        specialization: 'Cardiology',
-        address1: '123 Main St',
-        address2: 'Suite 200',
-        city: 'Springfield',
-        state: 'IL',
-        zipCode: '62701',
-        ugDegree: 'MBBS',
-        pgDegree: 'MD Cardiology',
-        instituteName: 'Harvard Medical School',
-        otherQualification: 'Fellowship in Cardiology',
-        gender: 'Male',
-        fees: 150,
-        availability: 'Mon-Fri, 9am - 5pm',
-        timeSlot: '30 minutes',
-        experience: 10,
-        patients: 25
-    },
-    {
-        id: 2,
-        name: 'Dr. Jane Smith',
-        phone: '234-567-8901',
-        email: 'jane.smith@example.com',
-        specialization: 'Pediatrics',
-        address1: '456 Oak St',
-        address2: '',
-        city: 'Shelbyville',
-        state: 'IN',
-        zipCode: '46176',
-        ugDegree: 'MBBS',
-        pgDegree: 'MD Pediatrics',
-        instituteName: 'Stanford University',
-        otherQualification: '',
-        gender: 'Female',
-        fees: 200,
-        availability: 'Tue-Thu, 10am - 4pm',
-        timeSlot: '20 minutes',
-        experience: 8,
-        patients: 30
-    },
-    {
-        id: 3,
-        name: 'Dr. Emily Jones',
-        phone: '345-678-9012',
-        email: 'emily.jones@example.com',
-        specialization: 'Dermatology',
-        address1: '789 Pine St',
-        address2: 'Apt 5B',
-        city: 'Capital City',
-        state: 'CA',
-        zipCode: '90210',
-        ugDegree: 'MBBS',
-        pgDegree: 'MD Dermatology',
-        instituteName: 'Johns Hopkins University',
-        otherQualification: 'Diploma in Dermatology',
-        gender: 'Female',
-        fees: 250,
-        availability: 'Mon-Wed, 1pm - 6pm',
-        timeSlot: '15 minutes',
-        experience: 5,
-        patients: 15
-    }
-];
-
-const page: React.FC = () => {
+const DoctorList: React.FC = () => {
     const router = useRouter();
+    const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchDoctorList = async () => {
+            setLoading(true);
+            setError(null); // Reset error before fetching
+            try {
+                const res = await axios.get(`${SERVER_BASE_URL}/doctorList`);
+                setAllDoctors(res.data);
+                console.log('Fetched doctors:', res.data);
+            } catch (error: any) {
+                console.error("Error fetching doctors:", error);
+                setError('Failed to fetch doctor list. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDoctorList();
+    }, []);
 
     const viewPatients = (doctorId: number) => {
-      router.push(`/admin/dashboard/all_doctors/${doctorId}/patients`);
+        router.push(`/admin/dashboard/all_doctors/${doctorId}/patients`);
     };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p>Error loading doctors: {error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="px-4 py-6 bg-white rounded-lg shadow-md">
@@ -116,13 +75,13 @@ const page: React.FC = () => {
                     <span className="hidden md:block text-center">Total Patients</span>
                     <span className="text-center">View Details</span>
                 </div>
-                {doctors.map((doctor) => (
+                {allDoctors.map((doctor) => (
                     <div key={doctor.id} className="grid items-center justify-center grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{doctor.name}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden lg:block text-center">{doctor.city}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor.experience} years</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor.experience}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">${doctor.fees}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor.patients}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor._count.patientDetails}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full flex items-center justify-center rounded-md bg-[#6F42C1]">
                             <button
                                 onClick={() => viewPatients(doctor.id)}
@@ -138,4 +97,4 @@ const page: React.FC = () => {
     );
 };
 
-export default page;
+export default DoctorList;

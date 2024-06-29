@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { SERVER_BASE_URL } from '../../../../../../../Config';
+import axios from 'axios';
 
 // Define the Patient interface
 interface Patient {
@@ -28,8 +30,8 @@ const page: React.FC = () => {
         // Fetch patients from the server for the specific doctor
         const fetchPatients = async () => {
             try {
-                const response = await fetch(`/api/doctors/${doctorId}/patients`); // API endpoint to fetch patients
-                const data: Patient[] = await response.json();
+                const response = await axios.get(`${SERVER_BASE_URL}/api/doctors/${doctorId}/patients`); // API endpoint to fetch patients
+                const data: Patient[] = await response.data();
                 setPatients(data);
                 setLoading(false);
             } catch (error) {

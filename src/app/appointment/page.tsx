@@ -10,29 +10,7 @@ const page = () => {
   const [doctorsList, setDoctorsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const doctorsList = [
-  //   {
-  //     id: 4,
-  //     name: "Dr. Sarah Lee",
-  //     specialization: "Dermatologist",
-  //     experience: 12,
-  //     gender: "Female",
-  //     address1: "123 Birch St",
-  //     city: "San Francisco",
-  //     state: "CA",
-  //     zipCode: "94101",
-  //     phone: "(415) 234-5678",
-  //     email: "sarah.lee@example.com",
-  //     availability: "10AM-12PM",
-  //     fees: "130",
-  //     ugDegree: "MBBS",
-  //     pgDegree: "MD Dermatology",
-  //     instituteNameUg: "University of California, Berkeley",
-  //     instituteNamePg: "University of Southern California",
-  //     timeSlot: "30 minutes",
-  //     image: "dsfhjgskdhf"
-  //   }
-  // ];
+  
   useEffect(() => {
 
     const fetchDoctorList = async () => {

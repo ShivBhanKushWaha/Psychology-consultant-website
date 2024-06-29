@@ -1,108 +1,84 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from "react";
-import BarGraph from './BarGraph'; // Import the BarGraph component
+import BarGraph from './BarGraph';
 
 interface SummaryProps {
-    doctors: Doctor[];
-    patients: Patient[];
+  totalDoctors: number;
+  totalPatients: number;
+  totalAppointments: number;
 }
 
-type Doctor = {
-    name: string;
-    status: string;
-}
+const Summary: React.FC<SummaryProps> = ({ totalDoctors, totalPatients, totalAppointments }) => {
+  const router = useRouter();
 
-type Patient = {
-    name: string;
-    status: string;
-}
-
-type SummaryDataType = {
-    [key: string]: {
-        label: string;
-        digit: number;
+  const graphData = [
+    {
+      day: "Doctors",
+      date: "",
+      totalAmount: totalDoctors
+    },
+    {
+      day: "Patients",
+      date: "",
+      totalAmount: totalPatients
+    },
+    {
+      day: "Appointments",
+      date: "",
+      totalAmount: totalAppointments
     }
-}
+  ];
 
-const Summary: React.FC<SummaryProps> = ({ doctors, patients }) => {
-    const router = useRouter();
-    const [summaryData, setSummaryData] = useState<SummaryDataType>({
-        doctors: {
-            label: 'Total Doctors',
-            digit: 0
-        },
-        patients: {
-            label: 'Total Patients',
-            digit: 0
-        }
-    });
+  const handleDoctorsClick = () => {
+    router.push('/admin/dashboard/all_doctors');
+  };
 
-    useEffect(() => {
-        setSummaryData({
-            doctors: {
-                label: 'Total Doctors',
-                digit: doctors.length
-            },
-            patients: {
-                label: 'Total Patients',
-                digit: patients.length
-            }
-        });
-    }, [doctors, patients]);
+  const handlePatientsClick = () => {
+    router.push('/admin/dashboard/all_patient');
+  };
 
-    // Prepare data for BarGraph
-    const graphData = [
-        {
-            day: "Doctors",
-            date: "",
-            totalAmount: summaryData.doctors.digit
-        },
-        {
-            day: "Patients",
-            date: "",
-            totalAmount: summaryData.patients.digit
-        }
-    ];
-
-    const handleDoctorsClick = () => {
-        router.push('/admin/dashboard/all_doctors');
-    };
-    const handlePatientClick = () => {
-        router.push('/admin/dashboard/all_patient');
-    };
-
-    return (
-        <div className="max-w-[1150px] m-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-50vh overflow-y-auto">
-                <div
-                    className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100"
-                    onClick={handleDoctorsClick}
-                >
-                    <div className="text-xl md:text-4xl font-bold">
-                        {summaryData.doctors.digit}
-                    </div>
-                    <div className="text-center">
-                        {summaryData.doctors.label}
-                    </div>
-                </div>
-                <div onClick={handlePatientClick} className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100">
-                    <div className="text-xl md:text-4xl font-bold">
-                        {summaryData.patients.digit}
-                    </div>
-                    <div className="text-center">
-                        {summaryData.patients.label}
-                    </div>
-                </div>
-            </div>
-
-            {/* Bar Graph Integration */}
-            <div className="mt-8">
-                <BarGraph data={graphData} />
-            </div>
+  return (
+    <div className="max-w-[1150px] m-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-h-50vh overflow-y-auto">
+        <div
+          className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100"
+          onClick={handleDoctorsClick}
+        >
+          <div className="text-xl md:text-4xl font-bold">
+            {totalDoctors}
+          </div>
+          <div className="text-center">
+            Total Doctors
+          </div>
         </div>
-    );
+        <div
+          className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100"
+          onClick={handlePatientsClick}
+        >
+          <div className="text-xl md:text-4xl font-bold">
+            {totalPatients}
+          </div>
+          <div className="text-center">
+            Total Patients
+          </div>
+        </div>
+        <div className="rounded-xl border-2 p-4 flex flex-col items-center gap-2 transition cursor-pointer hover:bg-gray-100">
+          <div className="text-xl md:text-4xl font-bold">
+            {totalAppointments}
+          </div>
+          <div className="text-center">
+            Total Appointments
+          </div>
+        </div>
+      </div>
+
+      {/* Bar Graph Integration */}
+      <div className="mt-8">
+        <BarGraph data={graphData} />
+      </div>
+    </div>
+  );
 }
 
 export default Summary;
