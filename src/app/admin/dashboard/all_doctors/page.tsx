@@ -22,14 +22,14 @@ interface Doctor {
 const DoctorList: React.FC = () => {
     const router = useRouter();
     const [allDoctors, setAllDoctors] = useState<Doctor[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchDoctorList = async () => {
-            setLoading(true);
             setError(null); // Reset error before fetching
             try {
+                setLoading(true);
                 const res = await axios.get(`${SERVER_BASE_URL}/doctorList`);
                 setAllDoctors(res.data);
                 console.log('Fetched doctors:', res.data);
@@ -79,8 +79,8 @@ const DoctorList: React.FC = () => {
                     <div key={doctor.id} className="grid items-center justify-center grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{doctor.name}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden lg:block text-center">{doctor.city}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor.experience}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">${doctor.fees}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor.experience} years</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">Rs. {doctor.fees}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{doctor._count.patientDetails}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full flex items-center justify-center rounded-md bg-[#6F42C1]">
                             <button

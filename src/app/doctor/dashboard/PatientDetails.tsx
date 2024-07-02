@@ -5,22 +5,40 @@ import { PopUpModal } from '@molecules'; // Adjust the import path if necessary
 
 interface PatientDetailsProp {
     id: number;
-    name: string;
+    familyMember: string;
+    age: string;
     gender: string;
-    age: number;
-    appointmentDate: string;
-    email: string;
-    phone: string;
-    diseases: string;
-    status: string;
+    contactNumber: string;
+    historyOfMentalIssue: string;
+    symptoms: string;
+    diagnosis: string;
+    treatment: string;
+    whichFamilyMember: string;
+    symptomsOfPatient: string;
+    whenProblemStart: string;
+    previousPatientTreatment: string;
+    freqOfSymptoms: string;
+    triggerPoint: string;
+    capacityOfWork: string;
+    sleepProper: string;
+    timeOfSleep: string;
+    eatingProperly: string;
+    interestedToDoSomething: string;
+    notInterested: string;
+    selfTime: string;
+    notSelfTime: string;
+    doctorId: number;
+    selectSlot: string;
+    doctor: {
+        name: string;
+    };
 }
 
 type PatientDetailsType = {
     patients: PatientDetailsProp[],
-    doctor: string;
 }
 
-const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
+const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
     const router = useRouter();
     const [selectedPatient, setSelectedPatient] = useState<PatientDetailsProp | null>(null);
 
@@ -33,15 +51,15 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
                     <span className="hidden md:block text-center">Gender</span>
                     <span className="hidden md:block text-center">Appointment Date</span>
                     <span className="text-center">Symptoms</span>
-                    <span className="hidden md:block text-center">Status</span>
+                    {/* <span className="hidden md:block text-center">Status</span> */}
                     <span className="hidden md:block text-center">Action</span>
                     <span className="text-center">Call</span>
                 </div>
                 {patients.map((patient, index) => (
                     <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.name}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyMember}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.appointmentDate}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full rounded-md bg-[#6F42C1] flex items-center justify-center">
                             <button
                                 onClick={() => setSelectedPatient(patient)}
@@ -50,7 +68,7 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
                                 Details
                             </button>
                         </span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.status}</span>
+                        {/* <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.status}</span> */}
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full hidden md:flex items-center justify-center rounded-md bg-[#6F42C1]">
                             <button
                                 onClick={() => router.push(`/doctor/dashboard/${patient.id}`)}
@@ -78,14 +96,30 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients, doctor }) => {
                     title="Patient Details"
                 >
                     <div className="p-4">
-                        <h3 className="text-xl font-bold mb-2 text-[#6F42C1]">{selectedPatient.name}</h3>
-                        <p><strong>Gender:</strong> {selectedPatient.gender}</p>
+                        <h3 className="text-xl font-bold mb-2 text-[#6F42C1]">{selectedPatient.familyMember}</h3>
                         <p><strong>Age:</strong> {selectedPatient.age}</p>
-                        <p><strong>Appointment Date:</strong> {selectedPatient.appointmentDate}</p>
-                        <p><strong>Email:</strong> {selectedPatient.email}</p>
-                        <p><strong>Phone:</strong> {selectedPatient.phone}</p>
-                        <p><strong>Diseases:</strong> {selectedPatient.diseases}</p>
-                        <p><strong>Status:</strong> {selectedPatient.status}</p>
+                        <p><strong>Gender:</strong> {selectedPatient.gender}</p>
+                        <p><strong>Contact Number:</strong> {selectedPatient.contactNumber}</p>
+                        <p><strong>History of Mental Issues:</strong> {selectedPatient.historyOfMentalIssue}</p>
+                        <p><strong>Symptoms:</strong> {selectedPatient.symptoms}</p>
+                        <p><strong>Diagnosis:</strong> {selectedPatient.diagnosis}</p>
+                        <p><strong>Treatment:</strong> {selectedPatient.treatment}</p>
+                        <p><strong>Which Family Member:</strong> {selectedPatient.whichFamilyMember}</p>
+                        <p><strong>Symptoms of Patient:</strong> {selectedPatient.symptomsOfPatient}</p>
+                        <p><strong>When Problem Started:</strong> {selectedPatient.whenProblemStart}</p>
+                        <p><strong>Previous Treatment:</strong> {selectedPatient.previousPatientTreatment}</p>
+                        <p><strong>Frequency of Symptoms:</strong> {selectedPatient.freqOfSymptoms}</p>
+                        <p><strong>Trigger Point:</strong> {selectedPatient.triggerPoint}</p>
+                        <p><strong>Capacity of Work:</strong> {selectedPatient.capacityOfWork}</p>
+                        <p><strong>Sleep Properly:</strong> {selectedPatient.sleepProper}</p>
+                        <p><strong>Time of Sleep:</strong> {selectedPatient.timeOfSleep}</p>
+                        <p><strong>Eating Properly:</strong> {selectedPatient.eatingProperly}</p>
+                        <p><strong>Interested to Do Something:</strong> {selectedPatient.interestedToDoSomething}</p>
+                        <p><strong>Not Interested:</strong> {selectedPatient.notInterested}</p>
+                        <p><strong>Self Time:</strong> {selectedPatient.selfTime}</p>
+                        <p><strong>Not Self Time:</strong> {selectedPatient.notSelfTime}</p>
+                        <p><strong>Doctor:</strong> {selectedPatient.doctor.name}</p>
+                        <p><strong>Appointment Slot:</strong> {selectedPatient.selectSlot}</p>
                     </div>
                 </PopUpModal>
             )}

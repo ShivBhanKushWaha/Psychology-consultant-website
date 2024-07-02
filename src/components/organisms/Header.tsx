@@ -6,6 +6,8 @@ import { Logo, Menu, Close, AdminLogo, DoctorLogin, UserLogin, Appointment, Home
 import { useRouter, usePathname } from 'next/navigation';
 import { useAppContext } from '../../app/Context/context';
 import { ProfileModal } from '@molecules';
+import axios from 'axios';
+import { SERVER_BASE_URL } from '../../../Config';
 const Header = () => {
   const router = useRouter();
   const pathName = usePathname()
@@ -35,6 +37,30 @@ const Header = () => {
       window.removeEventListener('resize', handleNav);
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const getLoggedDetails = async () => {
+      const token = localStorage.getItem('token');
+      console.log(token)
+      try{
+        const res = await axios.get(`${SERVER_BASE_URL}/userDetails`,{
+          headers:{
+            authorization: token
+          }
+        })
+
+        const userData = await res.data.details;
+        setResUserData(userData)
+        const userType = await res.data.type
+        setUserType(userType)
+      }
+      catch(error : any){
+        console.log('Error while fetching logged detaiks',error.message)
+      }
+    }
+
+    getLoggedDetails();
   }, []);
 
   return (

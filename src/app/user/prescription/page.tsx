@@ -59,7 +59,7 @@ const page = () => {
           <p className="text-lg font-semibold text-[#6F42C1]">Prescription</p>
           <div className="mt-2">
             <p className="text-lg"><strong>Treatment:</strong> {patient.prescription.treatment}</p>
-            <p className="text-lg mt-2"><strong>Mediation:</strong> {patient.prescription.mediation}</p>
+            <p className="text-lg mt-2"><strong>Medication:</strong> {patient.prescription.mediation}</p>
             <p className="text-lg mt-2"><strong>Therapies:</strong> {patient.prescription.therapies}</p>
           </div>
         </div>

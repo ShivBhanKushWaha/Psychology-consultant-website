@@ -15,7 +15,7 @@ const Page = () => {
         email: '',
         password: '',
     });
-
+    const [loading, setLoading] = useState(false);
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setUserData({
@@ -32,6 +32,7 @@ const Page = () => {
             toast.error('Enter correct password')
         }
         try {
+            setLoading(true)
             const res = await axios.post(`${SERVER_BASE_URL}/auth/admin`, userData);
 
             if (res) {
@@ -59,6 +60,9 @@ const Page = () => {
             }
             console.log('error while signin doctor', error)
         }
+        finally{
+            setLoading(false)
+        }
     };
 
     return (
@@ -77,8 +81,16 @@ const Page = () => {
                         <input placeholder='Enter Your Password' type="password" id="password" name="password" value={userData.password} onChange={handleChange} className="outline-none md:w-[85%] w-3/4 placeholder-text-[#1C1C1C] appearance-none" />
                     </div>
 
-                    <button onClick={() => signIn()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-6">SIGN UP</button>
-
+                    <div className="flex flex-row justify-center items-center mt-3">
+                        <button
+                            onClick={() => signIn()}
+                            disabled={loading}
+                            className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
+                                }`}
+                        >
+                            {loading ? "Processing..." : "SIGN IN"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

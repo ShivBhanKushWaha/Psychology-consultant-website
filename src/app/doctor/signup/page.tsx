@@ -32,6 +32,7 @@ const Page = () => {
     password: '',
     confirmPassword: ''
   });
+  const [loading, setLoading] = useState(false);
 
   const availableSlot: string[] = [
     "09:00 AM - 11:00 AM",
@@ -73,7 +74,7 @@ const Page = () => {
     }
 
     try {
-
+      setLoading(true)
       const doctorDataToSend = {
         ...doctorData,
         availability: doctorData.availabilityRanges, // Only send availability ranges
@@ -100,6 +101,9 @@ const Page = () => {
         console.log('error while signup new doctor', error.response)
       }
       console.log('error while signup new doctor', error)
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -187,35 +191,6 @@ const Page = () => {
             <label htmlFor="fees">Fees :</label>
             <input placeholder='Fees per slot' type="text" id="fees" name="fees" className="outline-none sm:w-[80%] w-[70%] " value={doctorData.fees} onChange={handleChange} />
           </div>
-          {/* <div className="flex flex-col border-[3px] border-[#6F42C1] rounded-3xl items-start sm:gap-3 gap-2 p-3 bg-white h-auto sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
-            <label className="flex flex-row items-center justify-center">Availability Ranges:
-              {doctorData.availabilityRanges.length > 0 ? (
-                <div className="grid sm:grid-cols-2 gap-y-2 grid-cols-1">
-                  {doctorData.availabilityRanges.map((slot) => (
-                    <p key={slot} className="border-[2px] border-[#6F42C1] rounded-[5px] px-1 py-1 mx-1 bg-[#6F42C1] bg-opacity-10">
-                      {slot}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <p className="border-[2px] border-[#6F42C1] rounded-[5px] px-2 py-1 mx-1 bg-[#6F42C1] bg-opacity-10">
-                  Select availability Ranges
-                </p>
-              )}</label>
-            <div className="grid grid-cols-1 gap-y-2 px-1">
-              {availableSlot.map((slot) => (
-                <label key={slot} className="flex flex-row items-center gap-x-1">
-                  <input
-                    type="checkbox"
-                    value={slot}
-                    checked={doctorData.availabilityRanges.includes(slot)}
-                    onChange={handleCheckboxChange}
-                  />
-                  {slot}
-                </label>
-              ))}
-            </div>
-          </div> */}
           <div className="flex flex-col border-[3px] border-[#6F42C1] rounded-3xl items-start sm:gap-3 gap-2 p-3 bg-white h-auto sm:w-[610px] sm:pr-3 pr-1 w-[90%] mt-5">
             <label className="flex flex-row items-center justify-center">Availability Ranges:
               {doctorData.availabilityRanges.length > 0 ? (
@@ -275,7 +250,16 @@ const Page = () => {
             <p className="text-[#013A00]">Account already exists?</p>
             <button onClick={() => router.push('/doctor/signin')} className="text-[#6F42C1]">Click here to login</button>
           </div>
-          <button onClick={() => handleSubmit()} type="submit" className="bg-[#6F42C1] w-[50%] rounded-full text-white py-2 mt-8">Register</button>
+          <div className="flex flex-row justify-center items-center mt-3">
+            <button
+              onClick={() => handleSubmit()}
+              disabled={loading}
+              className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
+                }`}
+            >
+              {loading ? "Creating..." : "Register"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

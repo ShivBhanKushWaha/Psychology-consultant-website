@@ -15,7 +15,7 @@ const Page = () => {
         email: '',
         password: '',
     });
-
+    const [loading, setLoading] = useState(false);
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setUserData({
@@ -38,6 +38,7 @@ const Page = () => {
         }
 
         try {
+            setLoading(true)
             const res = await axios.post(`${SERVER_BASE_URL}/auth/userLogin`, userData);
 
             if (res) {
@@ -66,6 +67,9 @@ const Page = () => {
             }
             console.log('error while signin  user', error)
         }
+        finally{
+            setLoading(false)
+        }
     };
 
     return (
@@ -93,8 +97,16 @@ const Page = () => {
                         <button onClick={() => router.push('/user/signup')} className="text-[#6F42C1]">Click here to Signup</button>
                     </div>
 
-                    <button onClick={() => signIn()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN IN</button>
-
+                    <div className="flex flex-row justify-center items-center mt-3">
+                        <button
+                            onClick={() => signIn()}
+                            disabled={loading}
+                            className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
+                                }`}
+                        >
+                            {loading ? "Signing..." : "SIGN IN"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ const page = () => {
         password: '',
         confirmPassword: ''
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -45,6 +46,7 @@ const page = () => {
         }
 
         try {
+            setLoading(true)
             const res = await axios.post(`${SERVER_BASE_URL}/auth/userSignup`, data);
             console.log(res.data.user)
             console.log(res.data.token)
@@ -68,6 +70,9 @@ const page = () => {
                 toast.error('User Already exists')
             }
             console.log('error while signup new user', error)
+        }
+        finally{
+            setLoading(false)
         }
     };
 
@@ -106,8 +111,16 @@ const page = () => {
                         <button onClick={() => router.push('/user/signin')} className="text-[#6F42C1]">Click here to login</button>
                     </div>
 
-                    <button onClick={() => SignUp()} className="bg-[#6F42C1] text-white text-[15px] font-bold w-[124px] h-[52px] rounded-2xl mt-3">SIGN UP</button>
-
+                    <div className="flex flex-row justify-center items-center mt-3">
+                        <button
+                            onClick={() => SignUp()}
+                            disabled={loading}
+                            className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
+                                }`}
+                        >
+                            {loading ? "Signing..." : "SIGN IN"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

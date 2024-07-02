@@ -11,24 +11,24 @@ interface PatientDetails {
   age: string;
   gender: string;
   contactNumber: string;
-  historyOfMentalIssue: string;
-  symptoms: string;
-  diagnosis: string;
-  treatment: string;
-  whichFamilyMember: string;
+  historyOfMentalIssue?: string;
+  symptoms?: string;
+  diagnosis?: string;
+  treatment?: string;
+  whichFamilyMember?: string;
   symptomsOfPatient: string;
-  whenProblemStart: string;
-  previousPatientTreatment: string;
-  freqOfSymptoms: string;
-  triggerPoint: string;
-  capacityofWork: string;
-  sleepProper: string;
-  timeOfSleep: string;
-  eatingProperly: string;
-  interestedToDoSomething: string;
-  notInterested: string;
-  selfTime: string;
-  notSelfTime: string;
+  whenProblemStart?: string;
+  previousPatientTreatment?: string;
+  freqOfSymptoms?: string;
+  triggerPoint?: string;
+  capacityOfWork: string;
+  sleepProper?: string;
+  timeOfSleep?: string;
+  eatingProperly?: string;
+  interestedToDoSomething?: string;
+  notInterested?: string;
+  selfTime?: string;
+  notSelfTime?: string;
 }
 
 type PatientDetailsKeys = keyof PatientDetails;
@@ -54,7 +54,7 @@ const Page = () => {
     previousPatientTreatment: '',
     freqOfSymptoms: 'daily',
     triggerPoint: '',
-    capacityofWork: '',
+    capacityOfWork: '',
     sleepProper: 'yes',
     timeOfSleep: '',
     eatingProperly: '',
@@ -63,7 +63,7 @@ const Page = () => {
     selfTime: 'yes',
     notSelfTime: '',
   });
-  console.log(patientDetails.capacityofWork)
+  console.log(patientDetails.capacityOfWork)
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     console.log(name, value)
@@ -84,7 +84,7 @@ const Page = () => {
   }, [id]);
 
   const handleSubmit = async () => {
-    const requiredFields: PatientDetailsKeys[] = ['familyMember', 'age', 'gender', 'contactNumber', 'symptomsOfPatient', 'triggerPoint', 'capacityofWork'];
+    const requiredFields: PatientDetailsKeys[] = ['familyMember', 'age', 'gender', 'contactNumber', 'symptomsOfPatient', 'triggerPoint', 'capacityOfWork'];
     for (let field of requiredFields) {
       if (!patientDetails[field]) {
         setError(`The field "${field}" is required.`);
@@ -101,10 +101,11 @@ const Page = () => {
         const patientData = {
           ...patientDetails,
           selectSlot,
-          capacityOfWork: patientDetails.capacityofWork  // Ensure capacityOfWork is included
+          capacityOfWork: patientDetails.capacityOfWork  // Ensure capacityOfWork is included
         };
         console.log(patientData)
         const res = await axios.post(`${SERVER_BASE_URL}/patient/details`, patientData);
+        console.log(res.data)
         router.push('/')
         toast.success('Doctor will contact soon!')
       }
@@ -277,8 +278,8 @@ const Page = () => {
           <input
             placeholder='Capacity of work'
             type="text"
-            name="capacityofWork"
-            value={patientDetails.capacityofWork}
+            name="capacityOfWork"
+            value={patientDetails.capacityOfWork}
             onChange={handleChange}
             className="w-full px-3 py-2 border active:outline-none rounded-lg outline-none focus:outline-none "
           />
@@ -359,7 +360,7 @@ const Page = () => {
             className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none focus:outline-none border-none hover:bg-opacity-70 ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
               }`}
           >
-            {loading ? "Loading..." : "Submit"}
+            {loading ? "Sending..." : "Send"}
           </button>
         </div>
 

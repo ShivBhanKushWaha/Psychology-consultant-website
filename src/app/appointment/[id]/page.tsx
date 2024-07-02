@@ -66,18 +66,6 @@ const DoctorPage = () => {
     setShowModal(false);
     console.log(slot)
     try {
-      // Send the selected slot to the server to book it
-      // const res = await axios.post(`${SERVER_BASE_URL}/appointment/book`, {
-      //   doctorId: doctor?.id,
-      //   slot,
-      // });
-      // toast.success('Slot booked successfully');
-
-      // // Generate Google Meet link and send email to user and doctor
-      // const meetRes = await axios.post(`${SERVER_BASE_URL}/appointment/generate-meet-link`, {
-      //   appointmentId: res.data.appointmentId,
-      // });
-      // toast.success('Google Meet link sent to your email');
       localStorage.setItem('selectSlot',slot)
       router.push(`/appointment/${doctor?.id}/patient`);
     } catch (error) {
@@ -113,7 +101,7 @@ const DoctorPage = () => {
       <div className="mt-6 space-y-4 text-center">
         <p><span className="font-bold">Gender:</span> {doctor.gender}</p>
         <p><span className="font-bold">Address:</span> {`${doctor.address1}, ${doctor.address2 ? `${doctor.address2}, ` : ''}${doctor.city}, ${doctor.state} ${doctor.zipCode}`}</p>
-        <p><span className="font-bold">Consultation Fees:</span> ${doctor.fees}</p>
+        <p><span className="font-bold">Consultation Fees:</span> {doctor.fees} Rs.</p>
         <p><span className="font-bold">Undergraduate Degree:</span> {doctor.ugDegree}</p>
         <p><span className="font-bold">Postgraduate Degree:</span> {doctor.pgDegree}</p>
         {doctor.otherQualification && <p><span className="font-bold">Other Qualifications:</span> {doctor.otherQualification}</p>}

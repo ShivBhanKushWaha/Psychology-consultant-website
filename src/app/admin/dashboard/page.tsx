@@ -37,8 +37,11 @@ const Admin = () => {
             totalAppointments={summaryData.totalAppointments}
           />
         ) : (
-          <div>Loading...</div> // Loading state while data is being fetched
-        )}
+          <div className="flex justify-center items-center h-screen">
+            <p>Loading...</p>
+          </div>
+        )
+        }
       </Container>
     </div>
   );

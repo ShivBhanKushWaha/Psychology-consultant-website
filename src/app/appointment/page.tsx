@@ -42,7 +42,7 @@ const page = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p>Error loading doctors: {error}</p>
+        <p className="text-center">Error loading doctors: {error}</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ const page = () => {
 
   if (!doctorsList) {
     <div className="flex justify-center items-center h-screen">
-      <p>No Doctor Available</p>
+      <p className="text-center">No Doctor Available</p>
     </div>
   }
 

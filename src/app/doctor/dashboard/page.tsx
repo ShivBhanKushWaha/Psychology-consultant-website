@@ -3,92 +3,80 @@ import React, { useEffect, useState } from 'react';
 import PatientDetails from './PatientDetails';
 import axios from 'axios';
 import { SERVER_BASE_URL } from '../../../../Config';
+// Define the Patient interface
+interface Patient {
+    id: number;
+    familyMember: string;
+    age: string;
+    gender: string;
+    contactNumber: string;
+    historyOfMentalIssue: string;
+    symptoms: string;
+    diagnosis: string;
+    treatment: string;
+    whichFamilyMember: string;
+    symptomsOfPatient: string;
+    whenProblemStart: string;
+    previousPatientTreatment: string;
+    freqOfSymptoms: string;
+    triggerPoint: string;
+    capacityOfWork: string;
+    sleepProper: string;
+    timeOfSleep: string;
+    eatingProperly: string;
+    interestedToDoSomething: string;
+    notInterested: string;
+    selfTime: string;
+    notSelfTime: string;
+    doctorId: number;
+    selectSlot: string;
+    doctor: {
+        name: string;
+    };
+}
 
 const page = () => {
-    const doctorName = 'Shiv Prajapati'
-    const patients = [
-        {   id:1,
-            name: 'Shivbhan kushwaha',
-            gender: 'male',
-            age: 22,
-            appointmentDate: '2022-11-25',
-            email: 't@gmail.com',
-            phone: '1116546633',
-            diseases: 'Cold',
-            status: 'consult'
-        },
-        {   id:2,
-            name: 'Abhay Sharma',
-            gender: 'male',
-            age: 27,
-            appointmentDate: '2022-12-03',
-            email: 'Abhay@gmail.com',
-            phone: '0174654540',
-            diseases: 'Fever',
-            status: 'Pending'
-        },
-        {   id:3,
-            name: 'Ayush Jaiswal',
-            gender: 'male',
-            age: 27,
-            appointmentDate: '2022-12-03',
-            email: 'Ayush@gmail.com',
-            phone: '017700056465',
-            diseases: 'Fever',
-            status: 'Pending'
-        },
-        {   id:4,
-            name: 'You & Me',
-            gender: 'female',
-            age: 36,
-            appointmentDate: '2022-12-03',
-            email: 'Mam@gmail.com',
-            phone: '017700606+50',
-            diseases: 'Fever',
-            status: 'Pending'
-        }
-    ];
-    // const [patients, setPatients] = useState([]); // State to store patient data
-    // const [loading, setLoading] = useState(true); // State to manage loading
-    // const [error, setError] = useState<string | null>(null); // State to manage errors
-    // console.log(patients)
+    const [patients, setPatients] = useState<Patient[]>([]); // State to store patient data
+    const [loading, setLoading] = useState(true); // State to manage loading
+    const [error, setError] = useState<string | null>(null); // State to manage errors
 
-    // Fetch data from the API
-    // useEffect(() => {
-    //     const fetchPatients = async () => {
-    //         try {
-    //             const response = await axios.get(`${SERVER_BASE_URL}/patients`); // Replace with your API endpoint
-    //             setPatients(response.data); // Set the fetched data
-    //             setLoading(false); // Set loading to false
-    //         } catch (error) {
-    //             console.error('Error fetching patient details:', error);
-    //             setError('Failed to load patient details'); // Set error message
-    //             setLoading(false); // Set loading to false
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(false); // Set loading to false
+                const response = await axios.get(`${SERVER_BASE_URL}/patients`);
+                const patientData = await response.data;
+                setPatients(patientData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError('Failed to load patient and doctor details'); // Set error message
+            }
+            finally{
+                setLoading(false)
+            }
+        };
 
-    //     fetchPatients(); // Call the function to fetch data
-    // }, []); // Empty dependency array to run only once on mount
+        fetchData(); // Call the function to fetch data
+    }, []); // Empty dependency array to run only once on mount
 
-    // Handle loading and error states
-    // if (loading) {
-    //     return (
-    //         <div className="flex justify-center items-center h-screen">
-    //             <p>Loading...</p>
-    //         </div>
-    //     );
-    // }
-    // if (error) {
-    //     return (
-    //         <div className="flex justify-center items-center h-screen">
-    //             <p className="text-red-500 text-lg">Error: {error}</p>
-    //         </div>
-    //     );
-    // }
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <p className="text-red-500 text-lg text-center">Error: {error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="container mx-auto my-8">
-            <PatientDetails patients={patients} doctor={doctorName} />
+            <PatientDetails patients={patients} />
         </div>
     );
 };
