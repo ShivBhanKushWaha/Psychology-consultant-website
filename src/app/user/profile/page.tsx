@@ -27,7 +27,7 @@ interface PatientTreatment {
 }
 
 
-const UserDetailsPage: React.FC = () => {
+const page: React.FC = () => {
   const router = useRouter();
   const { resUserData, setResUserData, userType, setUserType } = useAppContext();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -116,4 +116,4 @@ const UserDetailsPage: React.FC = () => {
   );
 };
 
-export default UserDetailsPage;
+export default page;
