@@ -26,12 +26,8 @@ interface PatientTreatment {
   userId: number;
 }
 
-interface ProfileProps {
-  patient:PatientTreatment[],
-  appointment:Appointment[]
-}
 
-const UserDetailsPage: React.FC<ProfileProps> = () => {
+const UserDetailsPage: React.FC = () => {
   const router = useRouter();
   const { resUserData, setResUserData, userType, setUserType } = useAppContext();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
