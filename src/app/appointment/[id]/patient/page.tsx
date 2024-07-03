@@ -57,7 +57,7 @@ const Page = () => {
     capacityOfWork: '',
     sleepProper: 'yes',
     timeOfSleep: '',
-    eatingProperly: '',
+    eatingProperly: 'yes',
     interestedToDoSomething: 'yes',
     notInterested: '',
     selfTime: 'yes',

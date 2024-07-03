@@ -93,7 +93,7 @@ const Page = () => {
                     <div key={patient.id} className="grid items-center justify-center grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis ml-4">{patient.familyMember}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden lg:block text-center">{patient.gender}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot == null ? "Not appointment" : patient.selectSlot}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">{patient.doctor.name}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.symptomsOfPatient}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full items-center flex justify-center rounded-md bg-[#6F42C1]">

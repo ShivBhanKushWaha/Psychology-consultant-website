@@ -1,47 +1,129 @@
 'use client'
-import { Logo } from '@assests';
-import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { SERVER_BASE_URL } from "../../../../../Config";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import { Logo } from "@assests";
+import toast from "react-hot-toast";
+
+interface DisplayPatient {
+  id: string; // Add ID to reference the patient
+  name: string;
+  gender: string;
+  age: number;
+  phone: string;
+  appointmentDate:string;
+}
+
+interface DisplayDoctor {
+  name: string;
+  doctorId:string;
+  specialization: string;
+  email: string;
+  phone: string;
+  experience: string;
+}
+
+interface PatientPageData {
+  patient: DisplayPatient;
+  doctor: DisplayDoctor;
+}
 
 const PatientPage = () => {
   const router = useRouter();
   const params = useParams();
-  const [checked,setChecked] = useState(false)
-  const [loading, setLoading] = useState(false);
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
-
-  const patients = [
-    { id: 1, name: 'Shivbhan Kushwaha', gender: 'male', age: 22, appointmentDate: '2022-11-25', email: 't@gmail.com', phone: '116546633', diseases: 'Cold', status: 'consult' },
-    { id: 2, name: 'Abhay Sharma', gender: 'male', age: 27, appointmentDate: '2022-12-03', email: 'Abhay@gmail.com', phone: '074654540', diseases: 'Fever', status: 'Pending' },
-    { id: 3, name: 'Ayush Jaiswal', gender: 'male', age: 27, appointmentDate: '2022-12-03', email: 'Ayush@gmail.com', phone: '700056465', diseases: 'Fever', status: 'Pending' },
-    { id: 4, name: 'You & Me', gender: 'female', age: 36, appointmentDate: '2022-12-03', email: 'Mam@gmail.com', phone: '770060650', diseases: 'Fever', status: 'Pending' }
-  ];
-
-  const patient = patients.find(p => p.id === parseInt(id));
-
-  if (!patient) {
-    return <p>Patient not found</p>;
-  }
-
+  const [loading, setLoading] = useState(true); // Initially loading is true
+  const [details, setDetails] = useState<PatientPageData | null>(null); // Use the simplified interface
+  const [error, setError] = useState<string | null>(null);
+  const [checked, setChecked] = useState(false);
   const [prescription, setPrescription] = useState({
     treatment: '',
-    mediation: '',
+    medication: '',
     therapies: ''
   });
 
-  const doctorName = 'Dr. Shiv Prajapati';
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${SERVER_BASE_URL}/patient/details/${id}`);
+        // Extract the necessary fields from the response data
+        const patientData: DisplayPatient = {
+          id: response.data.id,
+          name: response.data.familyMember,
+          gender: response.data.gender,
+          age: parseInt(response.data.age, 10),
+          phone: response.data.contactNumber,
+          appointmentDate: response.data.appointmentDate
+        };
+        
+        const doctorData: DisplayDoctor = {
+          doctorId:response.data.doctorId,
+          name: response.data.doctor.name,
+          specialization: response.data.doctor.specialization,
+          email: response.data.doctor.email,
+          phone: response.data.doctor.phone,
+          experience: response.data.doctor.experience
+        };
 
-  const handleSavePrescription = () => {
-    // Logic to save the prescription
-    console.log(`Prescription for ${patient.name}: ${prescription}`);
-    console.log(prescription)
-    // You can add navigation or state update logic here as needed
+        setDetails({ patient: patientData, doctor: doctorData });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to load patient details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleSavePrescription = async () => {
+    if (!details) return toast.error('User not found');
+
+    try {
+      const prescriptionData = {
+        doctorId: details.doctor.doctorId, // Assuming you have doctorId in real data
+        patientId: details.patient.id,
+        treatment: prescription.treatment,
+        medication: prescription.medication,
+        therapies: prescription.therapies
+      };
+
+      console.log(prescriptionData);
+      const response = await axios.post(`${SERVER_BASE_URL}/patient/treatment`, prescriptionData);
+
+      // If successful, you may want to navigate to another page or show a success message
+    } catch (error) {
+      console.error('Error saving prescription:', error);
+      setError('Failed to save prescription');
+    }
   };
+
+
+  if (loading) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <p>Loading...</p>
+        </div>
+    );
+}
+if (error) {
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <p className="text-red-500 text-lg text-center">Error: {error}</p>
+        </div>
+    );
+}
+
+  if (!details) {
+    return <p>Patient not found</p>;
+  }
 
   return (
     <div className="px-2 bg-white rounded-lg shadow-[#6F42C1] shadow-2xl sm:py-8 sm:px-16 py-4">
-      <h2 className="text-2xl text-center font-bold text-[#6F42C1] mb-4">Add Prescription for {patient.name}</h2>
+      <h2 className="text-2xl text-center font-bold text-[#6F42C1] mb-4">Add Prescription for {details.patient.name}</h2>
       <div className="lg:w-3/5 sm:h-4/5 w-full flex flex-col mx-auto border-[2px] border-[#6F42C1] rounded-2xl px-4 py-5">
         <div className="flex flex-col">
           <div className="flex flex-row items-center justify-evenly">
@@ -50,30 +132,27 @@ const PatientPage = () => {
           <div className="flex sm:flex-row flex-col sm:items-center items-start sm:justify-between mt-4">
             <div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Dr: <span className="text-[18px]  text-opacity-50 font-normal">{doctorName}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Dr: <span className="text-[18px] text-opacity-50 font-normal">{details.doctor.name}</span></p>
               </div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Serial No: <span className="text-[18px]  text-opacity-50 font-normal">{id}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Serial No: <span className="text-[18px] text-opacity-50 font-normal">{id}</span></p>
               </div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Patient Name: <span className="text-[18px]  text-opacity-50 font-normal">{patient.name}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Patient Name: <span className="text-[18px] text-opacity-50 font-normal">{details.patient.name}</span></p>
               </div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Gender: <span className="text-[18px]  text-opacity-50 font-normal">{patient.gender}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Gender: <span className="text-[18px] text-opacity-50 font-normal">{details.patient.gender}</span></p>
               </div>
             </div>
             <div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Patient Name: <span className="text-[18px]  text-opacity-50 font-normal">{patient.name}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Appointment Date: <span className="text-[18px] text-opacity-50 font-normal">{details.patient.appointmentDate == null ? "Not Appointment" : details.patient.appointmentDate}</span></p>
               </div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Appointment Date: <span className="text-[18px]  text-opacity-50 font-normal">{patient.appointmentDate}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Age: <span className="text-[18px] text-opacity-50 font-normal">{details.patient.age}</span></p>
               </div>
               <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Age: <span className="text-[18px]  text-opacity-50 font-normal">{patient.age}</span></p>
-              </div>
-              <div className="flex flow-row items-center justify-between mt-1">
-                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Phone: <span className="text-[18px]  text-opacity-50 font-normal">{patient.phone}</span></p>
+                <p className="text-[20px] text-[#6F42C1] text-opacity-100 font-semibold">Phone: <span className="text-[18px] text-opacity-50 font-normal">{details.patient.phone}</span></p>
               </div>
             </div>
           </div>
@@ -93,9 +172,9 @@ const PatientPage = () => {
           <textarea
             className="w-full resize-none border mt-1 border-[#6F42C1] rounded-xl outline-none appearance-none p-2 mb-4"
             rows={4}
-            value={prescription.mediation}
-            onChange={(e) => setPrescription({ ...prescription, mediation: e.target.value })}
-            placeholder='Mediation'
+            value={prescription.medication}
+            onChange={(e) => setPrescription({ ...prescription, medication: e.target.value })}
+            placeholder='Medication'
           />
         </div>
         <div>
@@ -110,24 +189,17 @@ const PatientPage = () => {
         </div>
 
         <div className="flex flex-row gap-x-3 items-center justify-center">
-          <input type="checkbox" onClick={() => setChecked(true)}/>
-          <p className="text-base text-[#6F42C1] text-opacity-80">I agree with rules & regulation of doctor</p>
+          <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)} />
+          <p className="text-base text-[#6F42C1] text-opacity-80">I agree with rules & regulations of the doctor</p>
         </div>
         <div className="flex flex-row items-center justify-center mt-2">
-          {/* <button
-            className={`px-8 py-2 bg-[#6F42C1] text-white rounded-md hover:bg-opacity-75 mr-5 ${checked ? "cursor-pointer" : "cursor-not-allowed"} `}
-            onClick={() => handleSavePrescription()}
-          >
-            Save
-          </button> */}
           <button
-              onClick={() => handleSavePrescription()}
-              disabled={loading}
-              className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none mr-5 focus:outline-none border-none hover:bg-opacity-70 ${checked ? "cursor-pointer" : "cursor-not-allowed"} ${loading ? "transition bg-[#c3b4e0] cursor-not-allowed" : ""
-                }`}
-            >
-              {loading ? "Adding..." : "Save"}
-            </button>
+            onClick={handleSavePrescription}
+            disabled={!checked || loading}
+            className={`bg-[#6F42C1] text-white px-6 py-2 rounded-lg outline-none mr-5 focus:outline-none border-none hover:bg-opacity-70 ${loading ? "bg-[#c3b4e0]" : ""}`}
+          >
+            {loading ? "Adding..." : "Save"}
+          </button>
           <button
             className="px-8 py-2 bg-gray-300 text-[#6F42C1] rounded-md hover:bg-gray-400"
             onClick={() => router.back()}

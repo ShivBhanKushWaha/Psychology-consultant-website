@@ -61,7 +61,7 @@ const Page = () => {
 
   const handleSubmit = async () => {
     const emptyFields = Object.values(doctorData).filter(value => value === '');
-    if (emptyFields.length > 0) {
+    if (emptyFields.length > 4) {
       return toast.error('Please fill in all fields');
     }
     if (doctorData.password.length < 5) {

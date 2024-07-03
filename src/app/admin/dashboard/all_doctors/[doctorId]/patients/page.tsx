@@ -73,7 +73,7 @@ const Page: React.FC = () => {
         const fetchDoctorWithPatients = async () => {
             try {
                 const response = await axios.get(`${SERVER_BASE_URL}/doctorWithPatient/${doctorId}`);
-                const data: Doctor = await response.data.doctorDetail;
+                const data: Doctor = await response.data;
                 console.log(data);
                 setDoctorData(data);
                 setLoading(false);
@@ -115,7 +115,7 @@ const Page: React.FC = () => {
                             <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyMember}</span>
                             <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
                             <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.age}</span>
-                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">{patient.selectSlot}</span>
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">{patient.selectSlot == null ? "Not appointment" : patient.selectSlot}</span>
                             <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-center">{patient.symptomsOfPatient}</span>
                         </div>
                     ))

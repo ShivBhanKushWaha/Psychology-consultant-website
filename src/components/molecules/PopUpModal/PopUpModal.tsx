@@ -17,7 +17,7 @@ const PopUpModal: React.FC<PopUpModalProps> = ({ isOpen, onClose, title, childre
                     <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
                     <button 
                         onClick={onClose} 
-                        className="text-gray-500 hover:text-gray-800"
+                        className="text-gray-500 hover:text-gray-800 text-3xl"
                     >
                         &times;
                     </button>

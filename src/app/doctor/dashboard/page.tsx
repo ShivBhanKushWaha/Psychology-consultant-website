@@ -29,7 +29,7 @@ interface Patient {
     selfTime: string;
     notSelfTime: string;
     doctorId: number;
-    selectSlot: string;
+    selectSlot?: string;
     doctor: {
         name: string;
     };
@@ -43,10 +43,11 @@ const page = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(false); // Set loading to false
+                setLoading(true); // Set loading to false
                 const response = await axios.get(`${SERVER_BASE_URL}/patients`);
                 const patientData = await response.data;
                 setPatients(patientData);
+                console.log(patientData)
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setError('Failed to load patient and doctor details'); // Set error message

@@ -7,7 +7,7 @@ import { useAppContext } from '../../../app/Context/context'
 import toast from 'react-hot-toast'
 const ProfileModal = ({ setHoverProfile, setShowHoverProfile }: any) => {
     const router = useRouter()
-    const { setResUserData } = useAppContext();
+    const { setResUserData,setUserType } = useAppContext();
 
     const handleProfile = () => {
         setHoverProfile(false);
@@ -29,7 +29,9 @@ const ProfileModal = ({ setHoverProfile, setShowHoverProfile }: any) => {
                 setShowHoverProfile(false)
                 localStorage.removeItem('token');
                 setResUserData(null);
+                setUserType(null)
                 router.push('/');
+                router.refresh()
                 toast.success('Sign out successfully');
             }
         } catch (error) {
@@ -39,7 +41,7 @@ const ProfileModal = ({ setHoverProfile, setShowHoverProfile }: any) => {
     };
 
     return (
-        <div className="flex flex-col py-6 bg-white rounded-[10px] shadow-2xl pl-6 pr-24 -ml-32 mt-8 gap-y-3">
+        <div className="flex flex-col py-6 bg-white rounded-[10px] shadow-2xl pl-6 pr-24 -ml-32 mt-4 gap-y-3">
             <div className="flex flex-row gap-x-8 cursor-pointer" onClick={() => handleProfile()}>
                 <p className="text-black">Profile</p>
             </div>

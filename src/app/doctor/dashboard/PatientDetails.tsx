@@ -28,7 +28,7 @@ interface PatientDetailsProp {
     selfTime: string;
     notSelfTime: string;
     doctorId: number;
-    selectSlot: string;
+    selectSlot?: string;
     doctor: {
         name: string;
     };
@@ -46,7 +46,7 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
         <div className="px-4 py-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl text-center font-bold text-[#6F42C1] mb-4">Patient Details</h2>
             <div className="grid gap-6">
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 bg-[#6F42C1] text-white font-medium uppercase text-xs tracking-wider py-3 px-6 rounded-t-lg">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 bg-[#6F42C1] text-white font-medium uppercase text-xs tracking-wider py-3 px-6 rounded-t-lg">
                     <span className="text-start">Name</span>
                     <span className="hidden md:block text-center">Gender</span>
                     <span className="hidden md:block text-center">Appointment Date</span>
@@ -56,10 +56,10 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
                     <span className="text-center">Call</span>
                 </div>
                 {patients.map((patient, index) => (
-                    <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
+                    <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyMember}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot}</span>
+                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot == null ? "Not appointment" : patient.selectSlot}</span>
                         <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full rounded-md bg-[#6F42C1] flex items-center justify-center">
                             <button
                                 onClick={() => setSelectedPatient(patient)}
@@ -119,7 +119,7 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
                         <p><strong>Self Time:</strong> {selectedPatient.selfTime}</p>
                         <p><strong>Not Self Time:</strong> {selectedPatient.notSelfTime}</p>
                         <p><strong>Doctor:</strong> {selectedPatient.doctor.name}</p>
-                        <p><strong>Appointment Slot:</strong> {selectedPatient.selectSlot}</p>
+                        <p><strong>Appointment Slot:</strong> {selectedPatient.selectSlot == null ? "Not appointment" : selectedPatient.selectSlot}</p>
                     </div>
                 </PopUpModal>
             )}

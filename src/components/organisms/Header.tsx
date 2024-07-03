@@ -8,13 +8,16 @@ import { useAppContext } from '../../app/Context/context';
 import { ProfileModal } from '@molecules';
 import axios from 'axios';
 import { SERVER_BASE_URL } from '../../../Config';
+import toast from 'react-hot-toast';
+
 const Header = () => {
   const router = useRouter();
-  const pathName = usePathname()
+  const pathName = usePathname();
   const [nav, setNav] = useState(false);
-  const { resUserData, setResUserData, userType, setUserType } = useAppContext()
-  const [hoverProfile, setHoverProfile] = useState(false)
+  const { resUserData, setResUserData, userType, setUserType } = useAppContext();
+  const [hoverProfile, setHoverProfile] = useState(false);
   const [showHoverProfile, setShowHoverProfile] = useState(false);
+
   const handleMouseEnter = () => {
     setShowHoverProfile(true);
   };
@@ -22,6 +25,7 @@ const Header = () => {
   const handleMouseLeave = () => {
     setShowHoverProfile(false);
   };
+
   useEffect(() => {
     function handleNav() {
       if (window.innerWidth > 767) {
@@ -42,30 +46,196 @@ const Header = () => {
   useEffect(() => {
     const getLoggedDetails = async () => {
       const token = localStorage.getItem('token');
-      console.log(token)
-      try{
-        const res = await axios.get(`${SERVER_BASE_URL}/userDetails`,{
-          headers:{
+      try {
+        const res = await axios.get(`${SERVER_BASE_URL}/userDetails`, {
+          headers: {
             authorization: token
           }
-        })
+        });
 
         const userData = await res.data.details;
-        setResUserData(userData)
-        const userType = await res.data.type
-        setUserType(userType)
+        setResUserData(userData);
+        const userType = await res.data.type;
+        setUserType(userType);
+      } catch (error: any) {
+        console.log('Error while fetching logged details', error.message);
       }
-      catch(error : any){
-        console.log('Error while fetching logged detaiks',error.message)
-      }
-    }
+    };
 
     getLoggedDetails();
   }, []);
 
+  const handleLinkClick = () => {
+    setNav(false); // Chiude il menu
+  };
+
+  const handleLogout = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (token) {
+            localStorage.removeItem('token');
+            setResUserData(null);
+            setUserType(null)
+            router.push('/');
+            router.refresh()
+            toast.success('Sign out successfully');
+        }
+    } catch (error:any) {
+        console.log('while trying to logout some error');
+        toast.error('logout error');
+    }
+};
+
+  const renderMenuItems = () => {
+    switch (userType) {
+      case 'admin':
+        return (
+          <>
+            {pathName !== '/' && (
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+                <Image src={Home} alt="Home Logo" />
+                <Link href="/">Home</Link>
+              </li>
+            )}
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={AdminLogo} alt='Admin Logo' />
+              <Link href="/admin/dashboard">Dashboard</Link>
+            </li>
+            {resUserData?.id && (
+              <div className="relative" onClick={() => handleLogout()}>
+                {resUserData?.image ? (
+                  <Image
+                    src={`${resUserData?.image}`}
+                    width={40}
+                    height={40}
+                    alt='User Profile'
+                    className="rounded-full relative"
+                  />
+                ) : (
+                  <Image
+                    src={CurrentUser}
+                    alt='Default Profile'
+                    className="cursor-pointer"
+                  />
+                )}
+              </div>
+            )}
+          </>
+        );
+      case 'doctor':
+        return (
+          <>
+            {pathName !== '/' && (
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+                <Image src={Home} alt="Home Logo" />
+                <Link href="/">Home</Link>
+              </li>
+            )}
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={DoctorLogin} alt='Doctor Logo' />
+              <Link href="/doctor/dashboard">Dashboard</Link>
+            </li>
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={Appointment} alt='Appointment Logo' />
+              <Link href="/appointment">Appointment</Link>
+            </li>
+            {resUserData?.id && (
+              <div className="relative" onClick={() => handleLogout()}>
+                {resUserData?.image ? (
+                  <Image
+                    src={`${resUserData?.image}`}
+                    width={40}
+                    height={40}
+                    alt='User Profile'
+                    className="rounded-full relative"
+                  />
+                ) : (
+                  <Image
+                    src={CurrentUser}
+                    alt='Default Profile'
+                    className="cursor-pointer"
+                  />
+                )}
+              </div>
+            )}
+          </>
+        );
+      case 'user':
+        return (
+          <>
+            {pathName !== '/' && (
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+                <Image src={Home} alt="Home Logo" />
+                <Link href="/">Home</Link>
+              </li>
+            )}
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={Appointment} alt='Appointment Logo' />
+              <Link href="/appointment">Appointment</Link>
+            </li>
+            {resUserData?.id && (
+              <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                {resUserData?.image ? (
+                  <Image
+                    src={`${resUserData?.image}`}
+                    width={40}
+                    height={40}
+                    alt='User Profile'
+                    className="cursor-pointer rounded-full relative"
+                  />
+                ) : (
+                  <Image
+                    src={CurrentUser}
+                    alt='Default Profile'
+                    className="cursor-pointer"
+                  />
+                )}
+                {(hoverProfile || showHoverProfile) && (
+                  <div
+                    onMouseEnter={() => setHoverProfile(true)}
+                    onMouseLeave={() => setHoverProfile(false)}
+                    className="absolute"
+                  >
+                    <ProfileModal setHoverProfile={setHoverProfile} setShowHoverProfile={setShowHoverProfile} />
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        );
+      default:
+        return (
+          <>
+            {pathName !== '/' && (
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+                <Image src={Home} alt="Home Logo" />
+                <Link href="/">Home</Link>
+              </li>
+            )}
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={Appointment} alt='Appointment Logo' />
+              <Link href="/appointment">Appointment</Link>
+            </li>
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={AdminLogo} alt='Admin Logo' />
+              <Link href="/admin/signin">Admin</Link>
+            </li>
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={DoctorLogin} alt='Doctor Logo' />
+              <Link href="/doctor/signin">Doctor</Link>
+            </li>
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <Image src={UserLogin} alt='Doctor Logo' />
+              <Link href="/user/signin">User</Link>
+            </li>
+          </>
+        );
+    }
+  };
+
   return (
     <nav className="w-full">
-      <div className="flex items-center justify-between md:px-8 md:py-5 px-4 py-1  bg-[#6F42C1]">
+      <div className="flex items-center justify-between md:px-8 md:py-2 px-4 py-1  bg-[#6F42C1]">
         <Image
           className="rounded-xl md:w-fit md:pl-0 w-32 h-10 object-contain"
           src={Logo}
@@ -88,133 +258,13 @@ const Header = () => {
 
         <div className="hidden w-full md:block md:w-auto">
           <ul className="flex font-normal text-white flex-row p-3 md:p-2 mt-4 rounded-lg md:mt-0 md:border-0 items-center justify-center">
-            {pathName !== '/' && (
-              <li onClick={() => router.push("/")} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0">
-                <Image src={Home} alt="Home Logo" />
-                Home
-              </li>
-            )}
-            <li className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/admin/signin")}>
-              <Image src={AdminLogo} alt='Admin Logo' />
-              Admin
-            </li>
-
-
-            <li className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/doctor/signin")}>
-              <Image src={DoctorLogin} alt='Doctor Logo' />
-              Doctor
-            </li>
-            <li className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2 md:mr-8 mr-0" onClick={() => router.push("/appointment")}>
-              <Image src={Appointment} alt='Doctor Logo' />
-              Appointment
-            </li>
-
-            {
-              <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                {resUserData?.id && (
-                  resUserData?.image ? (
-                    <Image
-                      src={`${resUserData?.image}`}
-                      width={40}
-                      height={40}
-                      alt='User Profile'
-                      className="cursor-pointer rounded-full relative"
-                    />
-                  ) : (
-                    <Image
-                      src={CurrentUser}
-                      alt='Default Profile'
-                      className="cursor-pointer"
-                    />
-                  )
-                )}
-                {(hoverProfile || showHoverProfile) && (
-                  <div
-                    onMouseEnter={() => setHoverProfile(true)}
-                    onMouseLeave={() => setHoverProfile(false)}
-                    className="absolute"
-                  >
-                    <ProfileModal setHoverProfile={setHoverProfile} setShowHoverProfile={setShowHoverProfile} />
-                  </div>
-                )}
-              </div>
-            }
-            {
-              (!resUserData?.id) &&
-              <li onClick={() => router.push('/user/signin')} className="text-base hover:cursor-pointer relative items-center justify-center flex flex-row gap-2"><Image src={UserLogin} alt='Doctor Logo' />
-                User</li>
-            }
+            {renderMenuItems()}
           </ul>
         </div>
 
         {nav && (
-          <ul className="flex z-50 flex-col justify-center items-center absolute top-12 left-0 w-full bg-[#6F42C1] shadow-md rounded-b-xl  text-white">
-            {
-              <div>
-                {pathName !== '/' && (<li className="px-4 cursor-pointer capitalize py-2">
-                  <Link
-                    onClick={() => setNav(!nav)}
-                    className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/"
-                  >
-                    <Image src={Home} alt='Admin Logo' />
-                    Home
-                  </Link>
-                </li>)}
-                <li className="px-4 cursor-pointer capitalize py-2">
-                  <Link
-                    onClick={() => setNav(!nav)}
-                    className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/admin/signin"
-                  >
-                    <Image src={AdminLogo} alt='Admin Logo' />
-                    Admin
-                  </Link>
-                </li>
-                {
-                  userType !== 'doctor' || userType === "" ? <li className="px-4 cursor-pointer capitalize py-2">
-                    <Link
-                      onClick={() => setNav(!nav)}
-                      className="text-base items-center justify-center flex flex-row gap-2"
-                      href="/doctor/signup"
-                    >
-                      <Image src={DoctorLogin} alt='Doctor Logo' />
-                      Doctor
-                    </Link>
-                  </li> : <li className="px-4 cursor-pointer capitalize py-2">
-                    <Link
-                      onClick={() => setNav(!nav)}
-                      className="text-base items-center justify-center flex flex-row gap-2"
-                      href="/doctor/dashboard"
-                    >
-                      <Image src={DoctorLogin} alt='Doctor Logo' />
-                      Dashboard
-                    </Link>
-                  </li>
-                }
-                <li className="px-4 cursor-pointer capitalize py-2">
-                  <Link
-                    onClick={() => setNav(!nav)}
-                    className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/appointment"
-                  >
-                    <Image src={Appointment} alt='Doctor Logo' />
-                    Appointment
-                  </Link>
-                </li>
-
-                <li className="px-4 cursor-pointer capitalize py-2">
-                  <Link
-                    onClick={() => setNav(!nav)}
-                    className="text-base items-center justify-center flex flex-row gap-2"
-                    href="/user/signin"
-                  >
-                    <Image src={UserLogin} alt='Doctor Logo' />
-                    User
-                  </Link>
-                </li>
-              </div>
-            }
+          <ul className="flex z-50 flex-col justify-center items-center absolute top-10 left-0 w-full bg-[#6F42C1] shadow-md rounded-b-xl text-white">
+            {renderMenuItems()}
           </ul>
         )}
       </div>
