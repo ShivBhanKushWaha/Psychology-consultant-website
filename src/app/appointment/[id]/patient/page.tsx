@@ -363,7 +363,6 @@ const Page = () => {
             {loading ? "Sending..." : "Send"}
           </button>
         </div>
-
       </div>
     </div>
   );

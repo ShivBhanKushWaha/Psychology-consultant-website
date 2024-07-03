@@ -52,11 +52,13 @@ const Header = () => {
             authorization: token
           }
         });
-
-        const userData = await res.data.details;
-        setResUserData(userData);
-        const userType = await res.data.type;
-        setUserType(userType);
+        console.log(res)
+        if (res) {
+          const userData = await res.data.details;
+          setResUserData(userData);
+          const userType = await res.data.type;
+          setUserType(userType);
+        }
       } catch (error: any) {
         console.log('Error while fetching logged details', error.message);
       }
@@ -71,20 +73,20 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-        const token = localStorage.getItem('token');
-        if (token) {
-            localStorage.removeItem('token');
-            setResUserData(null);
-            setUserType(null)
-            router.push('/');
-            router.refresh()
-            toast.success('Sign out successfully');
-        }
-    } catch (error:any) {
-        console.log('while trying to logout some error');
-        toast.error('logout error');
+      const token = localStorage.getItem('token');
+      if (token) {
+        localStorage.removeItem('token');
+        setResUserData(null);
+        setUserType(null)
+        router.push('/');
+        router.refresh()
+        toast.success('Sign out successfully');
+      }
+    } catch (error: any) {
+      console.log('while trying to logout some error');
+      toast.error('logout error');
     }
-};
+  };
 
   const renderMenuItems = () => {
     switch (userType) {
@@ -92,12 +94,12 @@ const Header = () => {
         return (
           <>
             {pathName !== '/' && (
-              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
                 <Image src={Home} alt="Home Logo" />
                 <Link href="/">Home</Link>
               </li>
             )}
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={AdminLogo} alt='Admin Logo' />
               <Link href="/admin/dashboard">Dashboard</Link>
             </li>
@@ -126,16 +128,16 @@ const Header = () => {
         return (
           <>
             {pathName !== '/' && (
-              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
                 <Image src={Home} alt="Home Logo" />
                 <Link href="/">Home</Link>
               </li>
             )}
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={DoctorLogin} alt='Doctor Logo' />
               <Link href="/doctor/dashboard">Dashboard</Link>
             </li>
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={Appointment} alt='Appointment Logo' />
               <Link href="/appointment">Appointment</Link>
             </li>
@@ -164,12 +166,12 @@ const Header = () => {
         return (
           <>
             {pathName !== '/' && (
-              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
                 <Image src={Home} alt="Home Logo" />
                 <Link href="/">Home</Link>
               </li>
             )}
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={Appointment} alt='Appointment Logo' />
               <Link href="/appointment">Appointment</Link>
             </li>
@@ -207,24 +209,24 @@ const Header = () => {
         return (
           <>
             {pathName !== '/' && (
-              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+              <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
                 <Image src={Home} alt="Home Logo" />
                 <Link href="/">Home</Link>
               </li>
             )}
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={Appointment} alt='Appointment Logo' />
               <Link href="/appointment">Appointment</Link>
             </li>
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={AdminLogo} alt='Admin Logo' />
               <Link href="/admin/signin">Admin</Link>
             </li>
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={DoctorLogin} alt='Doctor Logo' />
               <Link href="/doctor/signin">Doctor</Link>
             </li>
-            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-1.5">
+            <li onClick={handleLinkClick} className="text-base hover:cursor-pointer items-center justify-center flex flex-row gap-2 md:mr-8 mr-0 py-2">
               <Image src={UserLogin} alt='Doctor Logo' />
               <Link href="/user/signin">User</Link>
             </li>

@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Logo } from "@assests";
 import toast from "react-hot-toast";
+import { useAppContext } from "../../../Context/context";
 
 interface DisplayPatient {
   id: string; // Add ID to reference the patient
@@ -33,6 +34,7 @@ interface PatientPageData {
 const PatientPage = () => {
   const router = useRouter();
   const params = useParams();
+  const { resUserData, setResUserData, userType, setUserType } = useAppContext();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const [loading, setLoading] = useState(true); // Initially loading is true
   const [details, setDetails] = useState<PatientPageData | null>(null); // Use the simplified interface
@@ -55,7 +57,7 @@ const PatientPage = () => {
           gender: response.data.gender,
           age: parseInt(response.data.age, 10),
           phone: response.data.contactNumber,
-          appointmentDate: response.data.appointmentDate
+          appointmentDate: response.data.selectSlot
         };
         
         const doctorData: DisplayDoctor = {
@@ -83,21 +85,27 @@ const PatientPage = () => {
     if (!details) return toast.error('User not found');
 
     try {
+      setLoading(true)
       const prescriptionData = {
         doctorId: details.doctor.doctorId, // Assuming you have doctorId in real data
         patientId: details.patient.id,
         treatment: prescription.treatment,
         medication: prescription.medication,
-        therapies: prescription.therapies
+        therapies: prescription.therapies,
+        userId:resUserData.id
       };
 
       console.log(prescriptionData);
       const response = await axios.post(`${SERVER_BASE_URL}/patient/treatment`, prescriptionData);
-
-      // If successful, you may want to navigate to another page or show a success message
+      if(response){
+        toast.success('Successfully submitted')
+      }
     } catch (error) {
       console.error('Error saving prescription:', error);
       setError('Failed to save prescription');
+    }
+    finally{
+      setLoading(false)
     }
   };
 

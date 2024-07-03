@@ -72,11 +72,12 @@ const Page: React.FC = () => {
     useEffect(() => {
         const fetchDoctorWithPatients = async () => {
             try {
+                setLoading(true)
                 const response = await axios.get(`${SERVER_BASE_URL}/doctorWithPatient/${doctorId}`);
                 const data: Doctor = await response.data;
                 console.log(data);
                 setDoctorData(data);
-                setLoading(false);
+                
             } catch (error: any) {
                 console.error('Error fetching doctor and patients:', error);
             }

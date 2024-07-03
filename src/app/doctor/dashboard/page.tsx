@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PatientDetails from './PatientDetails';
 import axios from 'axios';
 import { SERVER_BASE_URL } from '../../../../Config';
+import { useParams, useRouter } from 'next/navigation';
+import { useAppContext } from '../../Context/context';
 // Define the Patient interface
 interface Patient {
     id: number;
@@ -29,36 +31,50 @@ interface Patient {
     selfTime: string;
     notSelfTime: string;
     doctorId: number;
-    selectSlot?: string;
-    doctor: {
-        name: string;
-    };
+    selectSlot: string;
 }
 
 const page = () => {
+    const router = useRouter()
     const [patients, setPatients] = useState<Patient[]>([]); // State to store patient data
     const [loading, setLoading] = useState(true); // State to manage loading
     const [error, setError] = useState<string | null>(null); // State to manage errors
+    const { resUserData, setResUserData, userType, setUserType } = useAppContext();
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDoctorWithPatients = async () => {
             try {
-                setLoading(true); // Set loading to false
-                const response = await axios.get(`${SERVER_BASE_URL}/patients`);
-                const patientData = await response.data;
-                setPatients(patientData);
-                console.log(patientData)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError('Failed to load patient and doctor details'); // Set error message
+                setLoading(true)
+                const response = await axios.get(`${SERVER_BASE_URL}/doctorWithPatient/${resUserData.id}`);
+                const data = await response.data;
+                console.log(data);
+                setPatients(data.patientDetail);
+                // setLoading(false);
+            } catch (error: any) {
+                console.error('Error fetching doctor and patients:', error);
+                setError('Failed to load the patient details')
             }
             finally{
                 setLoading(false)
             }
         };
 
-        fetchData(); // Call the function to fetch data
-    }, []); // Empty dependency array to run only once on mount
+        if(resUserData?.id && userType == 'doctor'){
+            fetchDoctorWithPatients();
+        }
+    }, [ resUserData?.id]);
+
+    if (userType != 'doctor') {
+        return (
+          <div className="flex items-center justify-center min-h-screen flex-col ">
+            <p className="text-center text-2xl">You are not a Doctor</p>
+            <p className="text-center text-xl">First login as a doctor</p>
+            <button onClick={() => router.push('/doctor/signin')} className="bg-[#6F42C1] rounded-full text-white w-60 px-6 py-2 mt-6">
+            Click Here
+            </button>
+          </div>
+        )
+      }
 
     if (loading) {
         return (

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { PopUpModal } from '@molecules'; // Adjust the import path if necessary
 
-interface PatientDetailsProp {
+interface Patient {
     id: number;
     familyMember: string;
     age: string;
@@ -28,19 +28,17 @@ interface PatientDetailsProp {
     selfTime: string;
     notSelfTime: string;
     doctorId: number;
-    selectSlot?: string;
-    doctor: {
-        name: string;
-    };
+    selectSlot: string;
 }
 
-type PatientDetailsType = {
-    patients: PatientDetailsProp[],
+interface PatientDetailsProps {
+    patients: Patient[]
 }
 
-const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
+
+const PatientDetails: React.FC<PatientDetailsProps> = ({ patients }) => {
     const router = useRouter();
-    const [selectedPatient, setSelectedPatient] = useState<PatientDetailsProp | null>(null);
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
     return (
         <div className="px-4 py-6 bg-white rounded-lg shadow-md">
@@ -55,38 +53,44 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
                     <span className="hidden md:block text-center">Action</span>
                     <span className="text-center">Call</span>
                 </div>
-                {patients.map((patient, index) => (
-                    <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyMember}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot == null ? "Not appointment" : patient.selectSlot}</span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full rounded-md bg-[#6F42C1] flex items-center justify-center">
-                            <button
-                                onClick={() => setSelectedPatient(patient)}
-                                className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                            >
-                                Details
-                            </button>
-                        </span>
-                        {/* <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.status}</span> */}
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full hidden md:flex items-center justify-center rounded-md bg-[#6F42C1]">
-                            <button
-                                onClick={() => router.push(`/doctor/dashboard/${patient.id}`)}
-                                className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                            >
-                                Add Prescription
-                            </button>
-                        </span>
-                        <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full flex items-center justify-center rounded-md bg-[#6F42C1]">
-                            <button
-                                onClick={() => router.push(`/doctor/dashboard/video_call/${patient.id}`)}
-                                className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                            >
-                                Call
-                            </button>
-                        </span>
-                    </div>
-                ))}
+                {
+                    patients.length > 0 ? patients.map((patient, index) => (
+                        <div key={index} className="grid items-center justify-center grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 px-1 bg-white border-b border-gray-200 py-2 rounded-lg shadow-sm">
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">{patient.familyMember}</span>
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.gender}</span>
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.selectSlot == null ? "Not appointment" : patient.selectSlot}</span>
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full rounded-md bg-[#6F42C1] flex items-center justify-center">
+                                <button
+                                    onClick={() => setSelectedPatient(patient)}
+                                    className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                                >
+                                    Details
+                                </button>
+                            </span>
+                            {/* <span className="whitespace-nowrap overflow-hidden overflow-ellipsis hidden md:block text-center">{patient.status}</span> */}
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full hidden md:flex items-center justify-center rounded-md bg-[#6F42C1]">
+                                <button
+                                    onClick={() => router.push(`/doctor/dashboard/${patient.id}`)}
+                                    className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                                >
+                                    Add Prescription
+                                </button>
+                            </span>
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis w-full flex items-center justify-center rounded-md bg-[#6F42C1]">
+                                <button
+                                    onClick={() => router.push(`/doctor/dashboard/video_call/${patient.id}`)}
+                                    className="px-2 py-2 text-white hover:bg-opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                                >
+                                    Call
+                                </button>
+                            </span>
+                        </div>
+                    )) : (
+                        <div className="text-center text-gray-500 mt-4">
+                            No patients found for this doctor.
+                        </div>
+                    )
+                }
             </div>
 
             {selectedPatient && (
@@ -118,7 +122,6 @@ const PatientDetails: React.FC<PatientDetailsType> = ({ patients }) => {
                         <p><strong>Not Interested:</strong> {selectedPatient.notInterested}</p>
                         <p><strong>Self Time:</strong> {selectedPatient.selfTime}</p>
                         <p><strong>Not Self Time:</strong> {selectedPatient.notSelfTime}</p>
-                        <p><strong>Doctor:</strong> {selectedPatient.doctor.name}</p>
                         <p><strong>Appointment Slot:</strong> {selectedPatient.selectSlot == null ? "Not appointment" : selectedPatient.selectSlot}</p>
                     </div>
                 </PopUpModal>
